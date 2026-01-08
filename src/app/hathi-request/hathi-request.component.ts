@@ -39,6 +39,12 @@ export class HathiRequestComponent {
 
   ngAfterViewInit() {
 
+    const enabled = this.moduleParameters.hathiRequestEnabled === "true";
+
+    if (!enabled) {
+      return;
+    }
+
     this.record$ = this.store.select(selectFullDisplayRecord); 	//only works when actually viewing the full record	
     this.record$.subscribe((record) => {
       if (record) {
