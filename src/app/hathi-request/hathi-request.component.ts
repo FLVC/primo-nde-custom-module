@@ -19,8 +19,7 @@ export class HathiRequestComponent {
   private store = inject(Store);
   private record$: Observable<any> | undefined;
   @Input() private hostComponent!: any;
-  @Inject('MODULE_PARAMETERS') public moduleParameters: any;
-
+  
   showAction: boolean = false;
   isFullRecord: boolean = false;
   recordId: string = '';
@@ -34,13 +33,12 @@ export class HathiRequestComponent {
 
   constructor(
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    @Inject('MODULE_PARAMETERS') public moduleParameters: any,
   ) { }
 
-  ngAfterViewInit() {
-
+  ngOnInit(): void {
     const enabled = this.moduleParameters.hathiRequestEnabled === "true";
-
     if (!enabled) {
       return;
     }
@@ -78,7 +76,6 @@ export class HathiRequestComponent {
     });
 
     if (!this.isFullRecord) {
-
       this.record$ = this.store.select(selectListViewRecord(this.hostComponent?.searchResult?.pnx?.control?.recordid[0]));
       this.record$.subscribe((record) => {
         if (record && record.pnx && record.pnx.display) {
