@@ -1,10 +1,25 @@
 # CustomModule
 
+## ✨ New Feature (9th November 2025): Support for all customization files in assets folder:
+All files that are you are able to customize through the assets folder of your customization package are now supported for preview when using the custom module in proxy mode.
+
+For example to preview your brand logo you can now place your customized logo file in the following path in your local project:
+`src/assets/images/library-logo.png`
+
+To start proxy mode use the command:
+``` bash
+npm run start:proxy
+```
+
+---
+
 ### Overview
+
+
 The NDE Customization package offers options to enhance and extend the functionality of Primo’s New Discovery Experience (NDE). You can add and develop your own components, customize theme templates, and tailor the discovery interface to your specific needs.
 
 **Note:**
-<mark>This branch includes updates and other improvements that will be compatible with the April 2025 release of NDE. We will merge this branch to the main one when it is compatible with released version of NDE.</mark>
+<mark>This branch includes updates and other improvements that are compatible with the December 2025 release of NDE.</mark>
 
 **Note:**
 The NDE Customization package is currently available exclusively to Primo customers who have early access to the New Discovery Experience (NDE). Further availability will be announced in upcoming releases.
@@ -63,8 +78,8 @@ The NDE Customization package is currently available exclusively to Primo custom
 
 There are two options for setting up your local development environment: configuring a proxy or using parameter on your NDE URL.
 
-- **Option 1: Update `proxy.conf.mjs` Configuration**:
-  - Set the URL of the server you want to test your code with by modifying the `proxy.conf.mjs` file in the `./proxy` directory:
+- **Option 1: Update `proxy.const.mjs` Configuration**:
+  - Set the URL of the server you want to test your code with by modifying the proxy.const.mjs file in the ./proxy directory:
     ```javascript
     // Configuration for the development proxy
     const environments = {
@@ -162,6 +177,27 @@ Or as Observable:
 ```angular2html
 isLoggedIn$ = this.store.select(selectIsLoggedIn);
 ```
+
+### Accessing app router
+
+- You can gain access to the app router service by injecting the SHELL_ROUTER  injection token to your component:
+
+```angular2html
+import {SHELL_ROUTER} from "../../injection-tokens"; //the import path may vary on your project
+private router = inject(SHELL_ROUTER);
+```
+
+- Listening for router navigation events. For example:
+
+```angular2html
+this.routerSubscription = this.router.events.subscribe((event) => {
+    if (event instanceof NavigationEnd) {
+        console.log('Tracking PageView: ', event.urlAfterRedirects);
+    }
+});
+```
+
+
 
 ### Translating from code tables 
 
