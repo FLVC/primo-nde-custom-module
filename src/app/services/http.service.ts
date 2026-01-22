@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class BannerService {
+export class HttpService {
 
   constructor(private http: HttpClient) {}
 
-  getBanner(url: string): Observable<string> {
+  getData(url: string): Observable<string> {
     return this.http.get(url, { responseType: 'text' });
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
-import { BannerService } from '../services/banner.service';
+import { HttpService } from '../services/http.service';
 
 @Component({
   selector: 'custom-flvc-banner',
@@ -11,7 +11,7 @@ import { BannerService } from '../services/banner.service';
 export class FlvcBannerComponent implements OnInit {
 
   constructor(
-    private bannerService: BannerService,
+    private httpService: HttpService,
     private renderer: Renderer2,
     @Inject('MODULE_PARAMETERS') public moduleParameters: any
   ) { }
@@ -30,7 +30,7 @@ export class FlvcBannerComponent implements OnInit {
     ];
 
     urls.forEach((url, index) => {
-      this.bannerService.getBanner(url).subscribe((data) => {
+      this.httpService.getData(url).subscribe((data) => {
         const bannerText = data.trim();
         if (bannerText.length > 0) {
           const div = this.renderer.createElement('div');
