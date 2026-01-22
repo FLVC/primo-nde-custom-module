@@ -1,7 +1,6 @@
-import { Component, Inject, Input, NgZone, OnChanges, OnInit } from '@angular/core';
+import { Component, Inject, Input, NgZone, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { map } from 'rxjs';
 import { getMatSelectDisplayedLabel, hideMatSelectById } from '../shared/utils';
 import { HttpService } from '../services/http.service';
 
@@ -12,11 +11,12 @@ import { HttpService } from '../services/http.service';
   templateUrl: './uborrow-request.component.html',
   styleUrl: './uborrow-request.component.scss'
 })
-export class UborrowRequestComponent implements OnInit, OnChanges {
+export class UborrowRequestComponent implements OnInit  {
   pickupCtrl = new FormControl('');
   ownerCtrl = new FormControl('');
   institutionCode: string = "";
   @Input() private hostComponent!: any;
+  showAction: boolean = false;
 
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
@@ -52,21 +52,8 @@ export class UborrowRequestComponent implements OnInit, OnChanges {
         });
 
         const sub = this.zone.onStable.subscribe(() => {
-          const volumeCtrl = this.hostComponent.form.get('volume');
           const pickupCtrl = this.hostComponent.form.get('pickupLocation');
           const ownerCtrl = this.hostComponent.form.get('owner');
-
-          if (volumeCtrl) {
-            volumeCtrl.valueChanges.pipe(
-              map(v => (v ?? '').toString().trim()),
-            ).subscribe((val: string) => {
-              if (val === '') {
-                if (volumeCtrl.value !== 'NONE') {
-                  volumeCtrl.setValue('NONE', { emitEvent: false });
-                }
-              }
-            });
-          }
 
           if (pickupCtrl) {
             this.pickupCtrl = pickupCtrl;
@@ -85,7 +72,7 @@ export class UborrowRequestComponent implements OnInit, OnChanges {
             hideMatSelectById('owner');
           }
 
-          if (volumeCtrl && pickupCtrl && ownerCtrl) {
+          if (pickupCtrl && ownerCtrl) {
             sub.unsubscribe();
           }
 
@@ -93,18 +80,6 @@ export class UborrowRequestComponent implements OnInit, OnChanges {
       }
     });
 
-  }
-
-  ngOnChanges(): void {
-    const sub = this.zone.onStable.subscribe(() => {
-      const volumeCtrl = this.hostComponent.form.get('volume');
-      if (volumeCtrl) {
-        if ((String(volumeCtrl.value ?? '').trim() === '')) {
-          volumeCtrl.setValue('NONE');
-        }
-        sub.unsubscribe();
-      }
-    });
   }
 
   setInitialState() {
