@@ -1,8 +1,11 @@
-import { Component, Inject, Input, NgZone, OnInit } from '@angular/core';
+import { Component, inject, Inject, Input, NgZone, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { getMatSelectDisplayedLabel, hideMatSelectById } from '../shared/utils';
 import { HttpService } from '../services/http.service';
+import { Store } from '@ngrx/store';
+import { distinctUntilChanged, shareReplay, take } from 'rxjs';
+import { selectInstitutionCode, selectViewId } from '../primo-store.service';
 
 @Component({
   selector: 'custom-uborrow-request',
@@ -11,12 +14,26 @@ import { HttpService } from '../services/http.service';
   templateUrl: './uborrow-request.component.html',
   styleUrl: './uborrow-request.component.scss'
 })
-export class UborrowRequestComponent implements OnInit  {
+export class UborrowRequestComponent implements OnInit {
   pickupCtrl = new FormControl('');
   ownerCtrl = new FormControl('');
+  citationType: string = "";
+  chapter: string = "";
+  pages: string = "";
+  specific: boolean = false;
   institutionCode: string = "";
+  viewId: string = "";
   @Input() private hostComponent!: any;
+  public store = inject(Store);
   showAction: boolean = false;
+  readonly institutionCode$ = this.store.select(selectInstitutionCode).pipe(
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+  readonly viewId$ = this.store.select(selectViewId).pipe(
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
 
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
@@ -26,15 +43,32 @@ export class UborrowRequestComponent implements OnInit  {
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.uborrowRequestEnabled === "true";
-    this.institutionCode = this.moduleParameters.institutionCode;
-
-    const url = 'https://alma-apps.test.flvc.org/owner/get.jsp?' +
-      "institution_code=" + encodeURIComponent(this.institutionCode) +
-      "&pickup_location=ALL";
+    const views = this.moduleParameters.uborrowRequestViews;
 
     if (!enabled) {
       return;
     }
+
+    this.institutionCode$
+      .pipe(take(1))
+      .subscribe(code => {
+        this.institutionCode = code ?? '';
+      });
+
+    this.viewId$
+      .pipe(take(1))
+      .subscribe(code => {
+        this.viewId = code ?? '';
+      });
+
+    if (views != undefined && !views.includes(this.viewId)) {
+      console.log('No matching view found for ' + this.viewId + ' options are ' + views)
+      return;
+    }
+
+    const url = 'https://alma-apps.test.flvc.org/owner/get.jsp?' +
+      "institution_code=" + encodeURIComponent(this.institutionCode) +
+      "&pickup_location=ALL";
 
     this.hostComponent.isLoading$.subscribe((isLoading: any) => {
       if (!isLoading) {
@@ -44,16 +78,15 @@ export class UborrowRequestComponent implements OnInit  {
         }
 
         this.httpService.getData(url).subscribe((data) => {
-          console.log("data");
-          console.log(data);
           const result = data.trim();
-          if (result === '0') console.log('nothing to do');
           if (result === '0') return;
         });
 
         const sub = this.zone.onStable.subscribe(() => {
           const pickupCtrl = this.hostComponent.form.get('pickupLocation');
           const ownerCtrl = this.hostComponent.form.get('owner');
+          const citationType = this.hostComponent.form.get('citationType');
+          const specific = this.hostComponent.form.get('specificChapterPages');
 
           if (pickupCtrl) {
             this.pickupCtrl = pickupCtrl;
@@ -64,7 +97,6 @@ export class UborrowRequestComponent implements OnInit  {
                 this.checkPickupState();
               });
             });
-
           }
 
           if (ownerCtrl) {
@@ -72,10 +104,23 @@ export class UborrowRequestComponent implements OnInit  {
             hideMatSelectById('owner');
           }
 
-          if (pickupCtrl && ownerCtrl) {
-            sub.unsubscribe();
+          if (citationType) {
+            citationType.valueChanges.subscribe(() => {
+              this.citationType = citationType.value;
+              this.checkPickupState();
+            });
           }
 
+          if (specific) {
+            specific.valueChanges.subscribe(() => {
+              this.specific = specific.value;
+              this.checkSpecific();
+            });
+          }
+
+          if (pickupCtrl && specific) {
+            sub.unsubscribe();
+          }
         });
       }
     });
@@ -130,17 +175,58 @@ export class UborrowRequestComponent implements OnInit  {
       "institution_code=" + encodeURIComponent(this.institutionCode) +
       "&pickup_location=" + encodeURIComponent(label);
 
+    if (this.institutionCode === 'UFL' && this.citationType === 'CR') {
+      console.log('setting owner to RES_SHARE');
+      this.ownerCtrl.setValue('RES_SHARE');
+      this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+    }
+    else if (this.institutionCode === 'UFL' && this.specific == true && (this.pages != '' || this.chapter != '')) {
+      console.log('setting owner to RES_SHARE');
+      this.ownerCtrl.setValue('RES_SHARE');
+      this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+    }
+    else {
+      this.httpService.getData(url).subscribe((data) => {
+        const result = data.trim();
 
-    this.httpService.getData(url).subscribe((data) => {
-      const result = data.trim();
-
-      if (result) {
-        this.ownerCtrl.setValue(result);
-        this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
-      }
-    });
+        if (result && this.ownerCtrl.value != result) {
+          console.log('setting owner to ' + result);
+          this.ownerCtrl.setValue(result);
+          this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+        }
+        else {
+          console.log("nothing to do owner already set to " + result);
+        }
+      });
+    }
 
     submitButton.disabled = false;
     submitButton.removeAttribute('disabled');
+  }
+
+  checkSpecific() {
+    if (this.specific == true) {
+      const sub = this.zone.onStable.subscribe(() => {
+        const chapter = this.hostComponent.form.get('chapter');
+        const pages = this.hostComponent.form.get('pagesToPhotocopy');
+
+        if (chapter) {
+          chapter.valueChanges.subscribe(() => {
+            this.chapter = chapter.value;
+            this.checkPickupState();
+          });
+        }
+
+        if (pages) {
+          pages.valueChanges.subscribe(() => {
+            this.pages = pages.value;
+            this.checkPickupState();
+          });
+        }
+        if (chapter && pages) {
+          sub.unsubscribe();
+        }
+      });
+    }
   }
 }

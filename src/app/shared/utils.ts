@@ -1,3 +1,5 @@
+export type ParsedVid = { institutionCode: string | null; viewId: string | null };
+
 /**
  * Hide a mat-select control by partial id
  *
@@ -38,3 +40,17 @@ export function getMatSelectDisplayedLabel(select: string | Element): string | n
   const labelEl = el.querySelector('.mat-mdc-select-value-text');
   return labelEl?.textContent?.trim() || null;
 }
+
+/**
+ * Parses the institution code and view id from the vid value
+ *
+ * @param vid - "<prefix>_<institutionCode>:<viewId>"
+ * @returns institution code and view id
+ */
+export function parseVid(vid: string): ParsedVid {
+  const [left, viewId] = vid.split(':', 2);
+  const [, institutionCode] = left.split('_', 2);
+  return { institutionCode, viewId };
+}
+
+
