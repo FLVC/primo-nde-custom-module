@@ -8,6 +8,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import { CommonModule } from '@angular/common';
 import { AutoAssetSrcDirective } from './services/auto-asset-src.directive';
 import {SHELL_ROUTER} from "./injection-tokens";
+import { provideHttpClient, withJsonpSupport } from '@angular/common/http';
 
 
 
@@ -23,7 +24,7 @@ export const AppModule = ({providers, shellRouter}: {providers:any, shellRouter:
       CommonModule,
       TranslateModule.forRoot({})
     ],
-    providers: [...providers, {provide: SHELL_ROUTER, useValue: shellRouter}],
+    providers: [...providers, {provide: SHELL_ROUTER, useValue: shellRouter}, provideHttpClient(withJsonpSupport())],
     bootstrap: []
   })
   class AppModule implements DoBootstrap{
