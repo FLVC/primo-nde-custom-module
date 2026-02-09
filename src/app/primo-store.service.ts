@@ -6,6 +6,7 @@ interface FullDisplayState {
 }
 
 interface SearchState {
+  searchParams: { [key: string]: any };
   entities: { [key: string]: any };
 }
 
@@ -49,3 +50,8 @@ export const selectListViewRecord = (recordId: string) =>
     selectSearchEntities,
     entities => entities[recordId]
   );
+
+export const selectSearchParams = createSelector(
+  selectSearchState,
+  state => state.searchParams ?? null
+);
