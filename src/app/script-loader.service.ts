@@ -29,7 +29,6 @@ export class ScriptLoaderService {
     }
 
     const promise = new Promise<void>((resolve, reject) => {
-      // If already present in DOM, resolve immediately
       const existing = this.document.querySelector<HTMLScriptElement>(
         `script[src="${src}"]`
       );
@@ -41,16 +40,14 @@ export class ScriptLoaderService {
       const script = this.renderer.createElement('script') as HTMLScriptElement;
       script.src = src;
       script.async = options.async ?? false;
-      script.defer = options.defer ?? true; // default to defer = true
+      script.defer = options.defer ?? true;
       script.type = 'text/javascript';
-      // Optional attributes (integrity, nonce, crossOrigin, etc.)
       if (options.attrs) {
         Object.entries(options.attrs).forEach(([k, v]) =>
           this.renderer.setAttribute(script, k, v),
         );
       }
 
-      // Mark when loaded so subsequent checks can fast-resolve
       script.onload = () => {
         (script as any)._loaded = true;
         resolve();
@@ -60,7 +57,6 @@ export class ScriptLoaderService {
         reject(new Error(`Failed to load script: ${src}`));
       };
 
-      // Append to <head> (or body if needed)
       const target = this.document.head || this.document.body;
       this.renderer.appendChild(target, script);
     });
