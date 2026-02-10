@@ -44,11 +44,13 @@ export class WorldCatFacetComponent implements OnInit {
         const mode = searchParams.mode ?? null;
         if (query) {
           if (mode && mode == "advanced") {
+            const excludedTypes: string[] = ["dr_s", "dr_e"];
             const queryArray: string[] = query.split(';');
             try {
               this.targetQuery = encodeURIComponent(queryArray.map(function (part) {
-                return part.split(",")[2] || "";
-              }).join(' '));
+                const type = part.split(",")[0] || "";
+                return excludedTypes.includes(type) ? "" : part.split(",")[2] || "";
+              }).join(' ').trim());
             } catch (e) {
               this.targetQuery = "";
             }
