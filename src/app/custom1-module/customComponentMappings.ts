@@ -3,6 +3,7 @@ import { HathiAvailabilityComponent } from "../hathi-availability/hathi-availabi
 import { HathiRequestComponent } from "../hathi-request/hathi-request.component";
 import { UborrowRequestComponent } from "../uborrow-request/uborrow-request.component";
 import { UborrowVolumeComponent } from "../uborrow-volume/uborrow-volume.component";
+import { WorldCatFacetComponent } from "../world-cat-facet/world-cat-facet.component";
 
 // Define the map
 export const selectorComponentMap = new Map<string, any>([
@@ -11,6 +12,7 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-record-actions-bottom', HathiRequestComponent],
 ['nde-base-request-form-after', UborrowRequestComponent],
 ['nde-base-request-form-bottom', UborrowVolumeComponent],
-['nde-record-availability-after', HathiAvailabilityComponent]
+['nde-record-availability-after', HathiAvailabilityComponent],
+['nde-search-filters-side-nav-bottom', WorldCatFacetComponent]
 
 ]);

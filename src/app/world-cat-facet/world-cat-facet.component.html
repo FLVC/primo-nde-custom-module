@@ -1,0 +1,15 @@
+@if (targetQuery.length > 0) {
+    <mat-divider role="separator" class="mat-divider nde-divider last-filter-group-divider mat-divider-horizontal ng-star-inserted" aria-orientation="horizontal"></mat-divider>
+    <div class="filter-group-panel margin-top-big margin-bottom-big ng-star-inserted">
+        <a href="{{ targetUrl }}{{ targetQuery}}" target="_blank" mat-stroked-button class="mat-mdc-tooltip-trigger quick-filter-btn margin-bottom-small margin-top-small mdc-button mdc-button--outlined mat-mdc-outlined-button quick-filter-btn-unselected mat-unthemed mat-mdc-button-base ng-star-inserted" style="flex: 0 0 auto;" mat-ripple-loader-class-name="mat-mdc-button-ripple" aria-label="Search in WorldCat">
+            <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>
+            <span class="mdc-button__label"> Find it &#64;
+                    <img width="21" height="21" alt="{{ targetAlt }}" aria-hidden="true" style="vertical-align:middle;"
+                    src="{{ targetImg }}"> {{ targetName }}  
+            </span>
+            <span class="mat-focus-indicator"></span>
+            <span class="mat-mdc-button-touch-target"></span>
+            <span class="mat-ripple mat-mdc-button-ripple"></span>
+        </a>
+    </div>
+}
