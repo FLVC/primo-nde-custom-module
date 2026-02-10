@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { distinctUntilChanged, Observable, shareReplay, take } from 'rxjs';
 import { selectFullDisplayRecord, selectListViewRecord, selectViewId } from '../primo-store.service';
 import { HathiAvailabilityService } from '../hathi-availability.service';
+import { truncateWithEllipsis } from '../shared/utils';
 
 @Component({
 	selector: 'custom-hathi-availability',
@@ -25,6 +26,7 @@ export class HathiAvailabilityComponent implements OnInit {
 	msg: string = '';
 	entityId: string = '';
 	viewId: string = '';
+	bibTitle: string = '';
 
 	readonly viewId$ = this.store.select(selectViewId).pipe(
 		distinctUntilChanged(),
@@ -84,6 +86,10 @@ export class HathiAvailabilityComponent implements OnInit {
 	updateHathiTrustAvailability = (record: any): Observable<string> | boolean => {
 		this.fullTextLink = false;
 
+		if (record?.pnx?.display?.title) {
+			this.bibTitle = truncateWithEllipsis(record?.pnx?.display?.title[0], 10);
+		}
+
 		if (record?.pnx?.addata?.oclcid) {
 			var hathiTrustIds = (record?.pnx?.addata?.oclcid || []).filter(this.isOclcNum).map((id: string) => {
 				return 'oclc:' + id.toLowerCase().replace('(ocolc)', '');
@@ -121,3 +127,4 @@ export class HathiAvailabilityComponent implements OnInit {
 		return this.entityId ? url + '?signon=swle:' + this.entityId : url;
 	}
 }
+

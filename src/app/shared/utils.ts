@@ -53,4 +53,15 @@ export function parseVid(vid: string): ParsedVid {
   return { institutionCode, viewId };
 }
 
+/**
+ * Truncates a string if it exceeds the given max length
+ * and appends an ellipsis to indicate truncation.
+ *
+ * @param str        The input string to truncate.
+ * @param maxLength  The maximum allowed length (before ellipsis).
+ * @returns          Truncated string with an ellipsis, or the original string.
+ */
+export function truncateWithEllipsis(str: string, maxLength: number): string {
+  return str.length > maxLength ? str.slice(0, maxLength) + "…" : str;
+}
 

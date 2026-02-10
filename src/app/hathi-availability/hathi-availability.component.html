@@ -1,7 +1,7 @@
 <span *ngIf="fullTextLink" class="HathiTrustLink">
-    <span class="icon icon-circle"  alt="HathiTrust Logo" aria-label="HathiTrust Logo">
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">  
-        <image id="image0" width="16" height="16" x="0" y="0"
+    <span class="icon icon-circle"  alt="HathiTrust Logo">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve" aria-hidden="true" focusable="false">  
+        <image width="16" height="16" x="0" y="0"
                   xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                   AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACNFBMVEXuegXvegTsewTveArw
                   eQjuegftegfweQXsegXweQbtegnsegvxeQbvegbuegbvegbveQbtegfuegbvegXveQbvegbsfAzt
@@ -24,9 +24,9 @@
                   Ni0wOS0xM1QxNDowNjoxMy0wNTowMEWVrRQAAAAASUVORK5CYII=" />
   		</svg> 
      </span>
-     <a target="_blank" class="anchor-tag-style" href="{{ fullTextLink }}">{{ msg }}
-           <span class="icon-small" alt="open in new window">
-		 	<svg id="open-in-new_cache941" width="100%" height="100%" viewBox="0 0 24 24" y="504" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet" focusable="false">
+     <a [attr.aria-label]="'open ' + bibTitle + ' in a new window'" target="_blank" class="anchor-tag-style" href="{{ fullTextLink }}">{{ msg }}
+           <span class="icon-small">
+		 	<svg width="100%" height="100%" viewBox="0 0 24 24" y="504" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
 	        	<path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
 	        </svg>
         </span>
