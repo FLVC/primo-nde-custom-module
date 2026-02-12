@@ -34,6 +34,9 @@ export class NicheAcademyComponent implements OnInit {
     this.routerState$ = this.store.select(selectRouterState);
     this.routerState$.subscribe((route) => {
       if (route && route == "home") {
+        document.querySelectorAll('.modal-na').forEach(element => {
+          element.remove();
+        });
         window.dispatchEvent(new Event("na-widget-reload"));
       }
     });
