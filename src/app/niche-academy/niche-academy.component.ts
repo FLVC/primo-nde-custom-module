@@ -1,7 +1,8 @@
 import { Component, inject, Inject, Input, NgZone, OnInit } from '@angular/core';
 import { ScriptLoaderService } from '../script-loader.service';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, shareReplay, take } from 'rxjs';
+import { delay, Observable } from 'rxjs';
+import { selectRouterState } from '../primo-store.service';
 
 @Component({
   selector: 'custom-niche-academy',
@@ -13,7 +14,7 @@ import { distinctUntilChanged, shareReplay, take } from 'rxjs';
 
 export class NicheAcademyComponent implements OnInit {
 
-  @Input() private hostComponent!: any;
+  private routerState$: Observable<any> | undefined;
   public store = inject(Store);
 
   constructor(
@@ -29,6 +30,13 @@ export class NicheAcademyComponent implements OnInit {
     if (!enabled) {
       return;
     }
+
+    this.routerState$ = this.store.select(selectRouterState);
+    this.routerState$.subscribe((route) => {
+      if (route && route == "home") {
+        window.dispatchEvent(new Event("na-widget-reload"));
+      }
+    });
 
     await this.zone.runOutsideAngular(() =>
       this.scripts.load(
