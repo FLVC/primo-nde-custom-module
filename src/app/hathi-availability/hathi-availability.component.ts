@@ -87,7 +87,9 @@ export class HathiAvailabilityComponent implements OnInit {
 		this.fullTextLink = false;
 
 		if (record?.pnx?.display?.title) {
-			this.bibTitle = truncateWithEllipsis(record?.pnx?.display?.title[0], 10);
+			console.log('bibTitle=' + record?.pnx?.display?.title);
+			this.bibTitle = truncateWithEllipsis(record?.pnx?.display?.title[0], 50);
+			console.log('bibTitle=' + this.bibTitle);
 		}
 
 		if (record?.pnx?.addata?.oclcid) {

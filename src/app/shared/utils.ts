@@ -1,3 +1,5 @@
+import { max } from "rxjs";
+
 export type ParsedVid = { institutionCode: string | null; viewId: string | null };
 
 /**
@@ -55,13 +57,32 @@ export function parseVid(vid: string): ParsedVid {
 
 /**
  * Truncates a string if it exceeds the given max length
- * and appends an ellipsis to indicate truncation.
+ * and removes punctuation, and appends an ellipsis to 
+ * indicate truncation.
  *
  * @param str        The input string to truncate.
  * @param maxLength  The maximum allowed length (before ellipsis).
  * @returns          Truncated string with an ellipsis, or the original string.
  */
 export function truncateWithEllipsis(str: string, maxLength: number): string {
-  return str.length > maxLength ? str.slice(0, maxLength) + "…" : str;
+  const clean = normalizePunctuationToSpaces(str);
+  if (clean.length <= maxLength) return clean;
+
+  const nextSpace = clean.indexOf(' ', maxLength);
+
+  if (nextSpace === -1) {
+    return clean;
+  }
+
+  return clean.slice(0, nextSpace).trimEnd() + '…';
 }
 
+/**
+ * Replace punctuation with spaces, collapse multiple spaces, and trim ends.
+ * Uses Unicode property escapes to target punctuation reliably.
+ * @param input      The input string      
+ */
+function normalizePunctuationToSpaces(input: string): string {
+  const withoutPunct = input.replace(/\p{P}+/gu, ' ');
+  return withoutPunct.replace(/\s+/g, ' ').trim();
+}
