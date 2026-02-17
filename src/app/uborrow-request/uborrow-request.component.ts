@@ -43,7 +43,8 @@ export class UborrowRequestComponent implements OnInit {
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.uborrowRequestEnabled === "true";
-    const views = this.moduleParameters.uborrowRequestViews;
+    const viewsParam = this.moduleParameters.libChatViews;
+    const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
 
     if (!enabled) {
       return;

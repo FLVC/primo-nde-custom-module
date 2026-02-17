@@ -15,6 +15,6 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-base-request-form-bottom', UborrowVolumeComponent],
 ['nde-record-availability-after', HathiAvailabilityComponent],
 ['nde-search-filters-side-nav-bottom', WorldCatFacetComponent],
-['nde-header-before', LibChatComponent],
+['nde-footer-after', LibChatComponent],
 
 ]);
