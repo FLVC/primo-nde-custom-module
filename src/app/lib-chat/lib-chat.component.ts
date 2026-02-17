@@ -16,19 +16,11 @@ export class LibChatComponent implements OnInit {
   ready: boolean = false;
   @Input() private hostComponent!: any;
   public store = inject(Store);
-<<<<<<< HEAD
 
   readonly viewId$ = this.store.select(selectViewId).pipe(
     distinctUntilChanged(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
-=======
-  
-  readonly viewId$ = this.store.select(selectViewId).pipe(
-      distinctUntilChanged(),
-      shareReplay({ bufferSize: 1, refCount: true })
-    );
->>>>>>> e1e18b6e7618b1f91008dc56d4e50cb467c5acb1
 
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
@@ -39,16 +31,8 @@ export class LibChatComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const enabled = this.moduleParameters.libChatEnabled === "true";
     const chatScript = this.moduleParameters.libChatScript;
-<<<<<<< HEAD
     const viewsParam = this.moduleParameters.libChatViews;
     const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
-=======
-    const views = this.moduleParameters.hathiAvailabilityViews;
-
-    if (!enabled) {
-      return;
-    }
->>>>>>> e1e18b6e7618b1f91008dc56d4e50cb467c5acb1
 
     this.viewId$
       .pipe(take(1))
@@ -67,21 +51,8 @@ export class LibChatComponent implements OnInit {
         {
           defer: true,
           async: true,
-<<<<<<< HEAD
         }
       )
     );
-=======
-          attrs: {
-            // crossorigin: 'anonymous',
-            // integrity: 'sha384-...',  // add if the CDN provides one
-            // nonce: 'your-csp-nonce',  // if your CSP requires nonce
-          },
-        }
-      )
-    );
-
-    this.ready = true;
->>>>>>> e1e18b6e7618b1f91008dc56d4e50cb467c5acb1
   }
 }
