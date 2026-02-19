@@ -10,6 +10,11 @@ interface SearchState {
   entities: { [key: string]: any };
 }
 
+interface RouterState {
+  isFirstNavigation: string | null;
+  routerState: string | null;
+}
+
 type ViewConfig = { config: { vid: string } };
 export const selectViewConfig = createFeatureSelector<ViewConfig>('viewConfig');
 
@@ -54,4 +59,10 @@ export const selectListViewRecord = (recordId: string) =>
 export const selectSearchParams = createSelector(
   selectSearchState,
   state => state.searchParams ?? null
+);
+
+const selectFeatureRouterState = createFeatureSelector<RouterState>('routerState');
+export const selectRouterState = createSelector(
+  selectFeatureRouterState,
+  state => state.routerState ?? null
 );
