@@ -1,7 +1,7 @@
 import { Component, inject, Inject, Input, NgZone, OnInit } from '@angular/core';
 import { ScriptLoaderService } from '../script-loader.service';
 import { Store } from '@ngrx/store';
-import { delay, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { selectRouterState } from '../primo-store.service';
 
 @Component({
@@ -34,6 +34,9 @@ export class NicheAcademyComponent implements OnInit {
     this.routerState$ = this.store.select(selectRouterState);
     this.routerState$.subscribe((route) => {
       if (route && route == "home") {
+        document.querySelectorAll('.modal-na').forEach(element => {
+          element.remove();
+        });
         window.dispatchEvent(new Event("na-widget-reload"));
       }
     });
@@ -44,11 +47,6 @@ export class NicheAcademyComponent implements OnInit {
         {
           defer: true,
           async: true,
-          attrs: {
-            // crossorigin: 'anonymous',
-            // integrity: 'sha384-...',  // add if the CDN provides one
-            // nonce: 'your-csp-nonce',  // if your CSP requires nonce
-          },
         }
       )
     );
