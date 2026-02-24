@@ -86,3 +86,29 @@ function normalizePunctuationToSpaces(input: string): string {
   const withoutPunct = input.replace(/\p{P}+/gu, ' ');
   return withoutPunct.replace(/\s+/g, ' ').trim();
 }
+
+/**
+ * Finds the closest element to the element supplied containing the search term.
+ *
+ * @param element - the starting HTMLElement
+ * @param string - the string to search for
+ * @returns HTMLElement or null if not found
+ */
+export function findClosestTargetFromElement(element: HTMLElement | null, search: string): HTMLElement | null {
+  let current: HTMLElement | null = element;
+
+  while (current && current !== document.body) {
+    if (current.classList.contains(search)) {
+      return current;
+    }
+
+    const found = current.querySelector(search);
+    if (found) {
+      return found as HTMLElement;
+    }
+
+    current = current.parentElement;
+  }
+
+  return null;
+}  
