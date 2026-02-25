@@ -25,13 +25,15 @@ export class RemoveEquipmentComponent implements OnInit {
     if (!enabled) {
       return;
     }
-
-    this.element = findClosestTargetFromElement(this.elementRef.nativeElement.parentElement, 'ng-star-inserted');
-    if (this.element != null) {
-      const h4 = findClosestTargetFromElement(this.element,'h4');
-      if (h4 != null && h4.textContent != null) {
-        if (h4.textContent.toLowerCase().includes('equipment')) {
-          this.element.style.display = 'none';
+    
+    if (this.hostComponent?.filterGroup?.id === 'lds01' && this.hostComponent?.filterValue?.value === 'Equipment') {
+      this.element = findClosestTargetFromElement(this.elementRef.nativeElement.parentElement, 'ng-star-inserted');
+      if (this.element != null) {
+        const h4 = findClosestTargetFromElement(this.element,'h4');
+        if (h4 != null && h4.textContent != null) {
+          if (h4.textContent.toLowerCase().includes('equipment')) {
+            this.element.style.display = 'none';
+          }
         }
       }
     }
