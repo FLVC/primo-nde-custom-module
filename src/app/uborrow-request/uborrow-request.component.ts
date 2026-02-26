@@ -43,7 +43,7 @@ export class UborrowRequestComponent implements OnInit {
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.uborrowRequestEnabled === "true";
-    const viewsParam = this.moduleParameters.libChatViews;
+    const viewsParam = this.moduleParameters.uborrowRequestViews;
     const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
 
     if (!enabled) {
@@ -67,7 +67,7 @@ export class UborrowRequestComponent implements OnInit {
       return;
     }
 
-    const url = 'https://alma-apps.test.flvc.org/owner/get.jsp?' +
+    const url = 'https://alma-apps.flvc.org/owner/get.jsp?' +
       "institution_code=" + encodeURIComponent(this.institutionCode) +
       "&pickup_location=ALL";
 
@@ -172,7 +172,7 @@ export class UborrowRequestComponent implements OnInit {
 
     const label: string = getMatSelectDisplayedLabel(matSelect) ?? '';
 
-    const url = 'https://alma-apps.test.flvc.org/owner/get.jsp?' +
+    const url = 'https://alma-apps.flvc.org/owner/get.jsp?' +
       "institution_code=" + encodeURIComponent(this.institutionCode) +
       "&pickup_location=" + encodeURIComponent(label);
 
