@@ -1,10 +1,10 @@
 import { Component, ElementRef, inject, Inject, Input, Renderer2 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
-import { Observable, tap } from 'rxjs';
+import { distinctUntilChanged, Observable, shareReplay, take, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { selectFullDisplayRecord, selectListViewRecord } from '../primo-store.service';
+import { selectFullDisplayRecord, selectListViewRecord, selectViewId } from '../primo-store.service';
 
 @Component({
   selector: 'custom-hathi-request',
@@ -16,10 +16,11 @@ import { selectFullDisplayRecord, selectListViewRecord } from '../primo-store.se
 
 export class HathiRequestComponent {
 
-  private store = inject(Store);
-  private record$: Observable<any> | undefined;
-  @Input() private hostComponent!: any;
-  
+  store = inject(Store);
+  record$: Observable<any> | undefined;
+  @Input() hostComponent!: any;
+  viewId: string = '';
+
   showAction: boolean = false;
   isFullRecord: boolean = false;
   recordId: string = '';
@@ -31,6 +32,11 @@ export class HathiRequestComponent {
   imprint: string = "";
   hathiTag: string = "";
 
+  readonly viewId$ = this.store.select(selectViewId).pipe(
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
@@ -39,11 +45,25 @@ export class HathiRequestComponent {
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.hathiRequestEnabled === "true";
+    const viewsParam = this.moduleParameters.hathiRequestViews;
+    const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
+
     if (!enabled) {
       return;
     }
 
-    this.record$ = this.store.select(selectFullDisplayRecord); 	//only works when actually viewing the full record	
+    this.viewId$
+      .pipe(take(1))
+      .subscribe(code => {
+        this.viewId = code ?? '';
+      });
+
+    if (views != undefined && !views.includes(this.viewId)) {
+      console.log('No matching view found for ' + this.viewId + ' options are ' + views)
+      return;
+    }
+
+    this.record$ = this.store.select(selectFullDisplayRecord);
     this.record$.subscribe((record) => {
       if (record) {
         this.isFullRecord = true;
