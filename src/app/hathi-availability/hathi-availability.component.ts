@@ -42,7 +42,7 @@ export class HathiAvailabilityComponent implements OnInit {
 		const enabled = this.moduleParameters.hathiAvailabilityEnabled === "true";
 		const msg = this.moduleParameters.hathiAvailabilityMsg ?? 'Full Text Available at HathiTrust';
 		const entityId = this.moduleParameters.hathiAvailabilityEntityId ?? '';
-		const viewsParam = this.moduleParameters.libChatViews;
+		const viewsParam = this.moduleParameters.hathiAvailabilityViews;
     	const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
 
 		if (!enabled) {
