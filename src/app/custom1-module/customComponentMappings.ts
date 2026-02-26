@@ -1,3 +1,4 @@
+import { DigitizationLinksComponent } from "../digitization-links/digitization-links.component";
 import { FlvcBannerComponent } from "../flvc-banner/flvc-banner.component";
 import { HathiAvailabilityComponent } from "../hathi-availability/hathi-availability.component";
 import { HathiRequestComponent } from "../hathi-request/hathi-request.component";
@@ -18,5 +19,6 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-search-filters-side-nav-bottom', WorldCatFacetComponent],
 ['nde-footer-after', LibChatComponent],
 ['nde-header-after', NicheAcademyComponent],
+['nde-physical-availability-line-bottom', DigitizationLinksComponent],
 
 ]);

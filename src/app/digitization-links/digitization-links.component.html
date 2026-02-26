@@ -1,0 +1,27 @@
+<span *ngIf="bibTitle" class="DigitizationLink">
+    <div class="flex-row availability-status ng-star-inserted">
+        <mat-icon role="img" class="mat-icon notranslate margin-right-small mat-icon-no-color ng-star-inserted"
+            aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="Available">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                <path
+                    d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z" />
+            </svg>
+        </mat-icon>
+        <button (click)="openExternal(wolfUrl)" mat-button=""
+            class="available-at-button margin-right-small basic-button mdc-button mat-mdc-button mat-unthemed mat-mdc-button-base"
+            mat-ripple-loader-class-name="mat-mdc-button-ripple" mat-ripple-loader-disabled=""
+            [attr.aria-label]="'Request ' + bibTitle + ' for digitization (opens in new window)'"><span
+                class="mat-mdc-button-persistent-ripple mdc-button__ripple">
+            </span>
+            {{ msg }}
+            <span class="icon-small">
+                <svg width="100%" height="100%" viewBox="0 0 24 24" y="504" xmlns="http://www.w3.org/2000/svg" fit=""
+                    preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <path
+                        d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z">
+                    </path>
+                </svg>
+            </span>
+        </button>
+    </div>
+</span>

@@ -1,0 +1,27 @@
+.DigitizationLink {
+    line-height: 1.2em;
+    font-size: smaller;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.DigitizationLink svg {
+    width: 100%;
+    height: 100%;
+}
+
+.DigitizationLink .mdc-button {
+    padding: 0px;
+}
+
+.DigitizationLink span.icon-small {
+    margin: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    fill: currentColor;
+    height: 20px;
+    width: 20px;
+    min-height: 20px;
+    min-width: 20px;
+}
