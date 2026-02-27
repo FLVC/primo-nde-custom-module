@@ -11,7 +11,7 @@
   "hathiRequestViews": [],
   "libChatEnabled": "false",
   "libChatScript": "",
-  "libChatViews": "",
+  "libChatViews": [],
   "nicheAcademyEnabled": "false",
   "nicheAcademyScript": "",
   "removeEquipmentEnabled": "false",
@@ -20,4 +20,5 @@
   "uborrowVolumeEnabled": "false",
   "uborrowVolumeViews": [],
   "worldcatEnabled": "false"
+
 }
