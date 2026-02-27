@@ -1,0 +1,23 @@
+{
+  "bannerEnabled": "false",
+  "digitizationLinksEnabled": "false",
+  "digitizationLinksMsg": "Request Digitization",
+  "digitizationLinksViews": [],
+  "hathiAvailabilityEnabled": "false",
+  "hathiAvailabilityMsg": "Full Text Available at HathiTrust",
+  "hathiAvailabilityEntityId": "",
+  "hathiAvailabilityViews": [],
+  "hathiRequestEnabled": "false",
+  "hathiRequestViews": [],
+  "libChatEnabled": "false",
+  "libChatScript": "",
+  "libChatViews": "",
+  "nicheAcademyEnabled": "false",
+  "nicheAcademyScript": "",
+  "removeEquipmentEnabled": "false",
+  "uborrowRequestEnabled": "false",
+  "uborrowRequestViews": [],
+  "uborrowVolumeEnabled": "false",
+  "uborrowVolumeViews": [],
+  "worldcatEnabled": "false"
+}
