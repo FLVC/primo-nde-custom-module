@@ -1,4 +1,4 @@
-import { Component, inject, Inject, Input, NgZone, OnInit } from '@angular/core';
+import { Component, inject, Inject, Input, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
 import { ScriptLoaderService } from '../script-loader.service';
 import { Store } from '@ngrx/store';
 import { selectViewId } from '../primo-store.service';
@@ -9,7 +9,8 @@ import { distinctUntilChanged, shareReplay, take } from 'rxjs';
   standalone: true,
   imports: [],
   templateUrl: './lib-chat.component.html',
-  styleUrl: './lib-chat.component.scss'
+  styleUrl: './lib-chat.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class LibChatComponent implements OnInit {
   viewId: string = '';

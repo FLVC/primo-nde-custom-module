@@ -1,0 +1,17 @@
+/* Ask Us button */
+#lcs_slide_out_button-26253{
+  border-color: #F9F9F9!important;
+  border-style: solid;
+  border-width: 0px 4px 4px;
+  font-weight: bold;
+  font-family: 'Montserrat';
+  padding: 12px 15px;
+}
+#lcs_slide_out_button-26253 img{
+  max-width: 100px;
+}
+@media print {
+
+  #lcs_slide_out_button-26253{ display: none; } /* Removes slide out button from printing view */
+
+}
