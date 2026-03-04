@@ -1,5 +1,7 @@
-import { Component, Inject, Input, NgZone, OnChanges, OnInit } from '@angular/core';
-import { map } from 'rxjs';
+import { Component, inject, Inject, Input, NgZone, OnChanges, OnInit } from '@angular/core';
+import { distinctUntilChanged, map, shareReplay, take } from 'rxjs';
+import { selectViewId } from '../primo-store.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'custom-uborrow-volume',
@@ -11,8 +13,14 @@ import { map } from 'rxjs';
 export class UborrowVolumeComponent implements OnInit, OnChanges {
 
   showAction: boolean = false;
-  institutionCode: string = "";
+  viewId: string = "";
   @Input() private hostComponent!: any;
+  public store = inject(Store);
+
+  readonly viewId$ = this.store.select(selectViewId).pipe(
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
 
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
@@ -21,9 +29,21 @@ export class UborrowVolumeComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.uborrowVolumeEnabled === "true";
-    this.institutionCode = this.moduleParameters.institutionCode;
+    const viewsParam = this.moduleParameters.uborrowVolumeViews;
+    const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
 
     if (!enabled) {
+      return;
+    }
+
+    this.viewId$
+      .pipe(take(1))
+      .subscribe(code => {
+        this.viewId = code ?? '';
+      });
+
+    if (views != undefined && !views.includes(this.viewId)) {
+      console.log('No matching view found for ' + this.viewId + ' options are ' + views)
       return;
     }
 
