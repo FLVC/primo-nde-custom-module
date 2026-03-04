@@ -1,5 +1,8 @@
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, Inject, OnInit, Renderer2 } from '@angular/core';
 import { HttpService } from '../services/http.service';
+import { selectInstitutionCode } from '../primo-store.service';
+import { distinctUntilChanged, shareReplay, take } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'custom-flvc-banner',
@@ -10,6 +13,14 @@ import { HttpService } from '../services/http.service';
 })
 export class FlvcBannerComponent implements OnInit {
 
+  public store = inject(Store);
+  institutionCode: string = "";
+
+  readonly institutionCode$ = this.store.select(selectInstitutionCode).pipe(
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
   constructor(
     private httpService: HttpService,
     private renderer: Renderer2,
@@ -18,15 +29,20 @@ export class FlvcBannerComponent implements OnInit {
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.bannerEnabled === "true";
-    const institutionCode = this.moduleParameters.institutionCode;
- 
+    
     if (!enabled) {
       return;
     }
 
+    this.institutionCode$
+      .pipe(take(1))
+      .subscribe(code => {
+        this.institutionCode = code ?? '';
+      });
+
     const urls = [
-      'https://alma-apps.flvc.org/primobanner/get.jsp?institution_code=' + institutionCode + '&ig=' + institutionCode,
-      'https://alma-apps.flvc.org/primobanner/get.jsp?institution_code=NETWORK&ig=' + institutionCode,
+      'https://alma-apps.flvc.org/primobanner/get.jsp?institution_code=' + this.institutionCode + '&ig=' + this.institutionCode,
+      'https://alma-apps.flvc.org/primobanner/get.jsp?institution_code=NETWORK&ig=' + this.institutionCode,
     ];
 
     urls.forEach((url, index) => {
