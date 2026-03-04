@@ -1,3 +1,4 @@
+import { FindingAidComponent } from "../finding-aid/finding-aid.component";
 import { DigitizationLinksComponent } from "../digitization-links/digitization-links.component";
 import { FlvcBannerComponent } from "../flvc-banner/flvc-banner.component";
 import { HathiAvailabilityComponent } from "../hathi-availability/hathi-availability.component";
@@ -22,5 +23,5 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-footer-after', LibChatComponent],
 ['nde-header-after', NicheAcademyComponent],
 ['nde-physical-availability-line-bottom', DigitizationLinksComponent],
-
+['nde-record-availability-bottom', FindingAidComponent]
 ]);
