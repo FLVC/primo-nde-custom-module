@@ -1,5 +1,5 @@
-<div id="briefResultAfterFindingAid" *ngIf="this.findingAidLink || this.digitizedMaterialLink">
-    <div *ngIf="this.findingAidLink">
+<div id="briefResultAfterFindingAid" *ngIf="findingAidLink || digitizedMaterialLink">
+    <div *ngIf="findingAidLink">
         <div class="filter-group-panel margin-top-big margin-bottom-big ng-star-inserted">
             <a href="{{ findingAidLink }}" target="_blank" mat-stroked-button class="mat-mdc-tooltip-trigger quick-filter-btn margin-bottom-small margin-top-small mdc-button mdc-button--outlined mat-mdc-outlined-button quick-filter-btn-unselected mat-unthemed mat-mdc-button-base ng-star-inserted" style="flex: 0 0 auto;" mat-ripple-loader-class-name="mat-mdc-button-ripple" aria-label="Finding Aid">
                 <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>
@@ -10,7 +10,7 @@
             </a>
         </div>
     </div>
-    <div *ngIf="this.digitizedMaterialLink">
+    <div *ngIf="digitizedMaterialLink">
         <div class="filter-group-panel margin-top-big margin-bottom-big ng-star-inserted">
             <a href="{{ digitizedMaterialLink }}" target="_blank" mat-stroked-button class="mat-mdc-tooltip-trigger quick-filter-btn margin-bottom-small margin-top-small mdc-button mdc-button--outlined mat-mdc-outlined-button quick-filter-btn-unselected mat-unthemed mat-mdc-button-base ng-star-inserted" style="flex: 0 0 auto;" mat-ripple-loader-class-name="mat-mdc-button-ripple" aria-label="Digitized Material">
                 <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>
