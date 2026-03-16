@@ -5,12 +5,11 @@ import { Observable } from 'rxjs';
 import { selectFullDisplayRecord, selectListViewRecord } from '../primo-store.service';
 import { MatIconRegistry, MatIcon } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AssetsPublicPathDirective } from '../services/assets-public-path.directive';
 
 @Component({
   selector: 'custom-finding-aid',
   standalone: true,
-  imports: [NgIf, MatIcon, AssetsPublicPathDirective],
+  imports: [NgIf, MatIcon],
   templateUrl: './finding-aid.component.html',
   styleUrl: './finding-aid.component.scss'
 })
@@ -22,8 +21,8 @@ export class FindingAidComponent implements OnInit {
   viewId: string = '';
   public store = inject(Store);
   isFullRecord: boolean = false;
-  public findingAidLink: string = "";
-  public digitizedMaterialLink: string = "";
+  findingAidLink: string = "";
+  digitizedMaterialLink: string = "";
   
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
@@ -66,12 +65,11 @@ export class FindingAidComponent implements OnInit {
       if (record?.pnx?.display) {
         Object.entries(record?.pnx?.display).forEach((key, value) => {
           const compareValue = String(key[1]);
-          if (compareValue.includes("Finding aid")) {
+          if (compareValue.includes("Finding aid") || compareValue.includes("Guía de la descripción de los documentos (Spanish-language finding aid):") || compareValue.includes("Guía de los Documentos (Spanish-language finding aid)")) {
             this.findingAidLink = compareValue.substring(compareValue.indexOf(':')+1).trim();
           }
-          if (compareValue.includes("Digitized material")) {
+          if (compareValue.includes("Digitized material") || compareValue.includes("Items from this collection have been digitized and are available online)")) {
             this.digitizedMaterialLink = compareValue.substring(compareValue.indexOf(':')+1);
-            console.log("Digitized Material Link:", this.digitizedMaterialLink);
           }
         });
       }
