@@ -2,6 +2,7 @@ import { DigitizationLinksComponent } from "../digitization-links/digitization-l
 import { FlvcBannerComponent } from "../flvc-banner/flvc-banner.component";
 import { HathiAvailabilityComponent } from "../hathi-availability/hathi-availability.component";
 import { HathiRequestComponent } from "../hathi-request/hathi-request.component";
+import { HideAvailabilityComponent } from "../hide-availability/hide-availability.component";
 import { LibChatComponent } from "../lib-chat/lib-chat.component";
 import { NicheAcademyComponent } from "../niche-academy/niche-academy.component";
 import { RemoveEquipmentComponent } from "../remove-equipment/remove-equipment.component";
@@ -22,5 +23,6 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-footer-after', LibChatComponent],
 ['nde-header-after', NicheAcademyComponent],
 ['nde-physical-availability-line-bottom', DigitizationLinksComponent],
+['nde-location-bottom', HideAvailabilityComponent]
 
 ]);
