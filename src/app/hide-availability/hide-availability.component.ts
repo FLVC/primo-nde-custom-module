@@ -25,9 +25,6 @@ export class HideAvailabilityComponent implements OnInit {
       return;
     }
 
-    console.log('HIDEAVAILABILITY');
-    console.log(locations);
-    //var locations = ["AMER", "JAFFE", "JAFFP", "LARKIN", "SPC", "SPJSA"];
     locations.forEach(async locationCode => {
       if (this.hostComponent.location.subLocationCode != null && locationCode === this.hostComponent.location.subLocationCode) {
 
