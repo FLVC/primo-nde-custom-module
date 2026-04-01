@@ -1,5 +1,5 @@
-import { Component, inject, Inject, Input, NgZone, OnChanges, OnInit } from '@angular/core';
-import { distinctUntilChanged, map, shareReplay, take } from 'rxjs';
+import { Component, inject, Inject, Input, NgZone, OnInit, Renderer2 } from '@angular/core';
+import { distinctUntilChanged, shareReplay, take } from 'rxjs';
 import { selectViewId } from '../primo-store.service';
 import { Store } from '@ngrx/store';
 
@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
   templateUrl: './uborrow-volume.component.html',
   styleUrl: './uborrow-volume.component.scss'
 })
-export class UborrowVolumeComponent implements OnInit, OnChanges {
+export class UborrowVolumeComponent implements OnInit {
 
   showAction: boolean = false;
   viewId: string = "";
@@ -25,6 +25,7 @@ export class UborrowVolumeComponent implements OnInit, OnChanges {
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
     private zone: NgZone,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
@@ -56,32 +57,26 @@ export class UborrowVolumeComponent implements OnInit, OnChanges {
 
         const sub = this.zone.onStable.subscribe(() => {
           const volumeCtrl = this.hostComponent.form.get('volume');
+          // Update selector to match Formly rendering with data-qa attribute
+          const element = (document.querySelector('[data-qa="almaResourceSharing.volume"] input') || 
+                           document.querySelector('input[formcontrolname="volume"]')) as HTMLElement;
 
-          if (volumeCtrl) {
-            volumeCtrl.valueChanges.pipe(
-              map(v => (v ?? '').toString().trim()),
-            ).subscribe((val: string) => {
-              if (val === '') {
-                if (volumeCtrl.value !== 'NONE') {
-                  volumeCtrl.setValue('NONE', { emitEvent: false });
-                }
+          if (volumeCtrl && element) {
+            // Set initial value to NONE if empty upon loading
+            if (String(volumeCtrl.value ?? '').trim() === '') {
+              volumeCtrl.setValue('NONE');
+            }
+
+            // Set to NONE if empty when field loses focus (blur)
+            this.renderer.listen(element, 'blur', () => {
+              if (String(volumeCtrl.value ?? '').trim() === '') {
+                volumeCtrl.setValue('NONE');
               }
             });
+
             sub.unsubscribe();
           }
         });
-      }
-    });
-  }
-
-  ngOnChanges(): void {
-    const sub = this.zone.onStable.subscribe(() => {
-      const volumeCtrl = this.hostComponent.form.get('volume');
-      if (volumeCtrl) {
-        if ((String(volumeCtrl.value ?? '').trim() === '')) {
-          volumeCtrl.setValue('NONE');
-        }
-        sub.unsubscribe();
       }
     });
   }
