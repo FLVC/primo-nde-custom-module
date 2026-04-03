@@ -44,8 +44,10 @@ export class FindingAidComponent implements OnInit {
   
   ngOnInit(): void {
     const enabled = this.moduleParameters.findingAidEnabled === "true";
-    const findingAidArray:string[] = this.moduleParameters.findingAidArray;
-    const digitizedMaterialArray:string[] = this.moduleParameters.digitizedMaterialArray;
+    const findingAidParam = this.moduleParameters.findingAidArray;
+    const findingAid = findingAidParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
+    const digitizedMaterialParam = this.moduleParameters.digitizedMaterialArray;
+    const digitizedMaterial = digitizedMaterialParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
     const viewsParam = this.moduleParameters.findingAidViews;
     const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
     
@@ -68,7 +70,7 @@ export class FindingAidComponent implements OnInit {
     this.record$.subscribe((record) => {
       if (record) {
         this.isFullRecord = true;
-        this.findRecordLinks(record, findingAidArray, digitizedMaterialArray);
+        this.findRecordLinks(record, findingAid, digitizedMaterial);
       }
       else {
         this.isFullRecord = false;
@@ -77,7 +79,7 @@ export class FindingAidComponent implements OnInit {
 		if (!this.isFullRecord) {
 			this.record$ = this.store.select(selectListViewRecord(this.hostComponent?.searchResult?.pnx?.control?.recordid[0]));
 			this.record$.subscribe((record) => {
-				this.findRecordLinks(record, findingAidArray, digitizedMaterialArray);
+				this.findRecordLinks(record, findingAid, digitizedMaterial);
 			});
 		}        
   }
