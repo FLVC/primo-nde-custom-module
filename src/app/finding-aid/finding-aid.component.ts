@@ -65,39 +65,41 @@ export class FindingAidComponent implements OnInit {
       console.log('No matching view found for ' + this.viewId + ' options are ' + views)
       return;
     }
-    
-    this.record$ = this.store.select(selectFullDisplayRecord);
-    this.record$.subscribe((record) => {
-      if (record) {
-        this.isFullRecord = true;
-        this.findRecordLinks(record, findingAid, digitizedMaterial);
-      }
-      else {
-        this.isFullRecord = false;
-      }
-    });
-		if (!this.isFullRecord) {
-			this.record$ = this.store.select(selectListViewRecord(this.hostComponent?.searchResult?.pnx?.control?.recordid[0]));
-			this.record$.subscribe((record) => {
-				this.findRecordLinks(record, findingAid, digitizedMaterial);
-			});
-		}        
-  }
-
-  findRecordLinks = (record: any, findingAidArray:string[], digitizedMaterialArray:string[]): any => {
-    if (record) {
-      if (record?.pnx?.display) {
-        Object.entries(record?.pnx?.display).forEach((key, value) => {
-          const compareValue = String(key[1]);
-
-          if (compareValue.includes("Finding aid") || findingAidArray?.some(item => compareValue.includes(item))) {
-            this.findingAidLink = compareValue.substring(compareValue.indexOf(':')+1).trim();
-          }
-          if (compareValue.includes("Digitized material") || digitizedMaterialArray?.some(item => compareValue.includes(item))) {
-            this.digitizedMaterialLink = compareValue.substring(compareValue.indexOf(':')+1);
+   
+    if (this.hostComponent) {
+      if (this.hostComponent?.docDelivery) {
+        if (this.hostComponent?.docDelivery?.link) {
+        Object.entries(this.hostComponent?.docDelivery?.link).forEach((key, value) => {
+          if (key) {
+            this.searchLink(key, findingAid, digitizedMaterial);
           }
         });
       }
+    }
+  }
+}
+
+searchLink = (link: any, findingAidArray:string[], digitizedMaterialArray:string[]): any => {
+  let foundLink:string = "";
+
+  if (link) {
+      Object.entries(link[1]).forEach((key, value) => {
+        const fieldValue = key[0];
+        const compareValue = key[1];
+
+        if (fieldValue === "linkURL") {
+          foundLink = String(compareValue);
+        }
+
+        if (fieldValue === "displayLabel") {
+          if (String(compareValue).includes("Finding aid") || findingAidArray?.some(item => String(compareValue).includes(item))) {
+            this.findingAidLink = foundLink;
+          }
+          if (String(compareValue).includes("Digitized material") || digitizedMaterialArray?.some(item => String(compareValue).includes(item))) {
+            this.digitizedMaterialLink = foundLink;
+          }
+        }
+      });
     }
   }
 }
