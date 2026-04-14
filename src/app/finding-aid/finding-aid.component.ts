@@ -66,40 +66,46 @@ export class FindingAidComponent implements OnInit {
       return;
     }
    
-    if (this.hostComponent) {
-      if (this.hostComponent?.docDelivery) {
-        if (this.hostComponent?.docDelivery?.link) {
-        Object.entries(this.hostComponent?.docDelivery?.link).forEach((key, value) => {
-          if (key) {
-            this.searchLink(key, findingAid, digitizedMaterial);
-          }
-        });
+    this.record$ = this.store.select(selectFullDisplayRecord);
+    this.record$.subscribe((record) => {
+      if (record) {
+        this.isFullRecord = true;
+        this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
+          console.log("this.hostComponent: ", this.hostComponent);
       }
-    }
-  }
+      else {
+        this.isFullRecord = false;
+        this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
+          console.log("this.hostComponent: ", this.hostComponent);
+      }
+    });
 }
 
-searchLink = (link: any, findingAidArray:string[], digitizedMaterialArray:string[]): any => {
+searchLink = (hostComponent: any, findingAidArray:string[], digitizedMaterialArray:string[]): any => {
+  const links =  hostComponent?.docDelivery?.link
   let foundLink:string = "";
 
-  if (link) {
-      Object.entries(link[1]).forEach((key, value) => {
+  if (links) {
+    links.forEach((link:Object) => {
+      Object.entries(link).forEach((key, value) => {
         const fieldValue = key[0];
         const compareValue = key[1];
 
         if (fieldValue === "linkURL") {
           foundLink = String(compareValue);
-        }
+          }
 
         if (fieldValue === "displayLabel") {
-          if (String(compareValue).includes("Finding aid") || findingAidArray?.some(item => String(compareValue).includes(item))) {
+          if (findingAidArray?.some(item => String(compareValue).includes(item))) {
             this.findingAidLink = foundLink;
-          }
-          if (String(compareValue).includes("Digitized material") || digitizedMaterialArray?.some(item => String(compareValue).includes(item))) {
+            }
+          if (digitizedMaterialArray?.some(item => String(compareValue).includes(item))) {
             this.digitizedMaterialLink = foundLink;
+            }
           }
-        }
-      });
-    }
+        });
+      }
+    )}
   }
 }
+  
