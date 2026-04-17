@@ -3,15 +3,13 @@ import { NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectFullDisplayRecord, selectListViewRecord } from '../primo-store.service';
-import { MatIconRegistry, MatIcon } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { selectViewId } from '../primo-store.service';
 import { distinctUntilChanged, shareReplay, take } from 'rxjs';
 
 @Component({
   selector: 'custom-finding-aid',
   standalone: true,
-  imports: [NgIf, MatIcon],
+  imports: [NgIf],
   templateUrl: './finding-aid.component.html',
   styleUrl: './finding-aid.component.scss'
 })
@@ -33,13 +31,7 @@ export class FindingAidComponent implements OnInit {
 
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
   ) { 
-    this.matIconRegistry.addSvgIcon(
-      'ic_folder_open_black_24px',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('/assets/images/ic_folder_open_black_24px.svg')
-    );    
   }
   
   ngOnInit(): void {
@@ -71,12 +63,10 @@ export class FindingAidComponent implements OnInit {
       if (record) {
         this.isFullRecord = true;
         this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
-          console.log("this.hostComponent: ", this.hostComponent);
       }
       else {
         this.isFullRecord = false;
         this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
-          console.log("this.hostComponent: ", this.hostComponent);
       }
     });
 }
