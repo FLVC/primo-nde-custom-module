@@ -1,4 +1,4 @@
-import { Component, Input,  inject, Inject, OnInit  } from '@angular/core';
+import { Component, Input,  inject, Inject, OnInit, AfterContentChecked  } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { distinctUntilChanged, shareReplay, take } from 'rxjs';
   templateUrl: './finding-aid.component.html',
   styleUrl: './finding-aid.component.scss'
 })
-export class FindingAidComponent implements OnInit {
+export class FindingAidComponent implements OnInit, AfterContentChecked {
 
   @Input() private hostComponent!: any;
   record$: Observable<any> | undefined;
@@ -66,9 +66,28 @@ export class FindingAidComponent implements OnInit {
       }
       else {
         this.isFullRecord = false;
-        this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
-      }
+        }
     });
+    if (!this.isFullRecord) {
+        let docDelivery =  this.hostComponent.docDelivery;
+        if (docDelivery) {
+          this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
+      }
+    }
+}
+
+ngAfterContentChecked() {
+  const findingAidParam = this.moduleParameters.findingAidArray;
+  const findingAid = findingAidParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
+  const digitizedMaterialParam = this.moduleParameters.digitizedMaterialArray;
+  const digitizedMaterial = digitizedMaterialParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
+
+  if (!this.isFullRecord) {
+    let docDelivery =  this.hostComponent.docDelivery;
+    if (docDelivery) {
+      this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
+    }
+  }
 }
 
 searchLink = (hostComponent: any, findingAidArray:string[], digitizedMaterialArray:string[]): any => {
