@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { distinctUntilChanged, Observable, shareReplay, take, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { selectFullDisplayRecord, selectListViewRecord, selectViewId } from '../primo-store.service';
+import { selectFullDisplayRecord, selectInstitutionCode, selectListViewRecord, selectViewId } from '../primo-store.service';
 
 @Component({
   selector: 'custom-hathi-request',
@@ -20,6 +20,7 @@ export class HathiRequestComponent {
   record$: Observable<any> | undefined;
   @Input() hostComponent!: any;
   viewId: string = '';
+  institutionCode: string = "";
 
   showAction: boolean = false;
   isFullRecord: boolean = false;
@@ -33,6 +34,11 @@ export class HathiRequestComponent {
   hathiTag: string = "";
 
   readonly viewId$ = this.store.select(selectViewId).pipe(
+    distinctUntilChanged(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  readonly institutionCode$ = this.store.select(selectInstitutionCode).pipe(
     distinctUntilChanged(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -62,6 +68,12 @@ export class HathiRequestComponent {
       console.log('No matching view found for ' + this.viewId + ' options are ' + views)
       return;
     }
+
+    this.institutionCode$
+      .pipe(take(1))
+      .subscribe(code => {
+        this.institutionCode = code ?? '';
+      });
 
     this.record$ = this.store.select(selectFullDisplayRecord);
     this.record$.subscribe((record) => {
@@ -167,7 +179,7 @@ export class HathiRequestComponent {
   }
 
   public processLink() {
-    let processedLink: string = "https://alma-apps.flvc.org/alma-form-email/email.jsp?inst=XXX&bib=" +
+    let processedLink: string = "https://alma-apps.flvc.org/alma-form-email/email.jsp?inst=" + this.institutionCode + "&bib=" +
       encodeURIComponent(this.title) +
       ";;;" +
       encodeURIComponent(this.author) +
