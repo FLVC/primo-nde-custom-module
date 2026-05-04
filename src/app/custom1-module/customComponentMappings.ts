@@ -11,6 +11,7 @@ import { UborrowRequestComponent } from "../uborrow-request/uborrow-request.comp
 import { UborrowVolumeComponent } from "../uborrow-volume/uborrow-volume.component";
 import { WidgetLoaderComponent } from "../widget-loader/widget-loader.component";
 import { WorldCatFacetComponent } from "../world-cat-facet/world-cat-facet.component";
+import { HathiLinksComponent } from "../hathi-links/hathi-links.component";
 
 // Define the map
 export const selectorComponentMap = new Map<string, any>([
@@ -27,5 +28,6 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-physical-availability-line-bottom', DigitizationLinksComponent],
 ['nde-location-bottom', HideAvailabilityComponent],
 ['nde-footer-bottom', WidgetLoaderComponent],
-['nde-record-availability-bottom', FindingAidComponent]
+['nde-record-availability-bottom', FindingAidComponent],
+['nde-view-it-section-after', HathiLinksComponent]
 ]);
