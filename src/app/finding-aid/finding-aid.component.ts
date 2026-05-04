@@ -1,10 +1,10 @@
-import { Component, Input,  inject, Inject, OnInit, AfterContentChecked  } from '@angular/core';
+import { Component, Input,  inject, Inject, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectFullDisplayRecord, selectListViewRecord } from '../primo-store.service';
 import { selectViewId } from '../primo-store.service';
-import { distinctUntilChanged, shareReplay, take } from 'rxjs';
+import { distinctUntilChanged, shareReplay, take, interval, filter } from 'rxjs';
 
 @Component({
   selector: 'custom-finding-aid',
@@ -13,7 +13,7 @@ import { distinctUntilChanged, shareReplay, take } from 'rxjs';
   templateUrl: './finding-aid.component.html',
   styleUrl: './finding-aid.component.scss'
 })
-export class FindingAidComponent implements OnInit, AfterContentChecked {
+export class FindingAidComponent implements OnInit {
 
   @Input() private hostComponent!: any;
   record$: Observable<any> | undefined;
@@ -69,52 +69,30 @@ export class FindingAidComponent implements OnInit, AfterContentChecked {
         }
     });
     if (!this.isFullRecord) {
-        let docDelivery =  this.hostComponent.docDelivery;
-        if (docDelivery) {
-          this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
-      }
-    }
-}
-
-ngAfterContentChecked() {
-  const findingAidParam = this.moduleParameters.findingAidArray;
-  const findingAid = findingAidParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
-  const digitizedMaterialParam = this.moduleParameters.digitizedMaterialArray;
-  const digitizedMaterial = digitizedMaterialParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
-
-  if (!this.isFullRecord) {
-    let docDelivery =  this.hostComponent.docDelivery;
-    if (docDelivery) {
-      this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
+      interval(300).pipe(
+        filter(() => !!this.hostComponent?.docDelivery),
+        take(1)
+      ).subscribe(() => {
+        this.searchLink(this.hostComponent, findingAid, digitizedMaterial);
+      });
     }
   }
-}
 
-searchLink = (hostComponent: any, findingAidArray:string[], digitizedMaterialArray:string[]): any => {
-  const links =  hostComponent?.docDelivery?.link
-  let foundLink:string = "";
+  searchLink = (hostComponent: any, findingAidArray: string[], digitizedMaterialArray: string[]): any => {
+    const links = hostComponent?.docDelivery?.link || [];
 
-  if (links) {
-    links.forEach((link:Object) => {
-      Object.entries(link).forEach((key, value) => {
-        const fieldValue = key[0];
-        const compareValue = key[1];
+    for (const link of links) {
+      const label = link.displayLabel || '';
+      const url = link.linkURL || '';
 
-        if (fieldValue === "linkURL") {
-          foundLink = String(compareValue);
-          }
-
-        if (fieldValue === "displayLabel") {
-          if (findingAidArray?.some(item => String(compareValue).includes(item))) {
-            this.findingAidLink = foundLink;
-            }
-          if (digitizedMaterialArray?.some(item => String(compareValue).includes(item))) {
-            this.digitizedMaterialLink = foundLink;
-            }
-          }
-        });
+      if (findingAidArray.some(item => label.includes(item))) {
+        this.findingAidLink = url;
       }
-    )}
+
+      if (digitizedMaterialArray.some(item => label.includes(item))) {
+        this.digitizedMaterialLink = url;
+      }
+    }
   }
 }
   
