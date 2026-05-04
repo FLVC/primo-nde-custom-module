@@ -26,6 +26,6 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-header-after', NicheAcademyComponent],
 ['nde-physical-availability-line-bottom', DigitizationLinksComponent],
 ['nde-location-bottom', HideAvailabilityComponent],
-['nde-footer-bottom', WidgetLoaderComponent]
+['nde-footer-bottom', WidgetLoaderComponent],
 ['nde-record-availability-bottom', FindingAidComponent]
 ]);
