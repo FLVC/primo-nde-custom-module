@@ -2,7 +2,7 @@ import { Component, Input,  inject, Inject, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectFullDisplayRecord, selectListViewRecord } from '../primo-store.service';
+import { selectFullDisplayRecord } from '../primo-store.service';
 import { selectViewId } from '../primo-store.service';
 import { distinctUntilChanged, shareReplay, take, interval, filter } from 'rxjs';
 
