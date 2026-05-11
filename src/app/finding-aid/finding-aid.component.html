@@ -1,0 +1,36 @@
+<div id="briefResultAfterFindingAid" *ngIf="findingAidLink || digitizedMaterialLink">
+    <div role="group" class="flex-row gap-1 quick-filters-container">
+        <div *ngIf="findingAidLink">
+            <div class="filter-group-panel margin-top-big margin-bottom-big ng-star-inserted">
+                <a href="{{ findingAidLink }}" target="_blank" mat-stroked-button class="mat-mdc-tooltip-trigger quick-filter-btn margin-bottom-small margin-top-small mdc-button mdc-button--outlined mat-mdc-outlined-button quick-filter-btn-unselected mat-unthemed mat-mdc-button-base ng-star-inserted" style="flex: 0 0 auto;" mat-ripple-loader-class-name="mat-mdc-button-ripple" aria-label="Finding Aid">
+                    <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>
+                    <span class="mdc-button__label"> FINDING AID&nbsp;&nbsp;
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" style="font-size: 16px; width: 16px; height: 16px;">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                        </svg>
+                    </span>
+                    <span class="mat-focus-indicator"></span>
+                    <span class="mat-mdc-button-touch-target"></span>
+                    <span class="mat-ripple mat-mdc-button-ripple"></span>
+                </a>
+            </div>
+        </div>
+        <div *ngIf="digitizedMaterialLink">
+            <div class="filter-group-panel margin-top-big margin-bottom-big ng-star-inserted">
+                <a href="{{ digitizedMaterialLink }}" target="_blank" mat-stroked-button class="mat-mdc-tooltip-trigger quick-filter-btn margin-bottom-small margin-top-small mdc-button mdc-button--outlined mat-mdc-outlined-button quick-filter-btn-unselected mat-unthemed mat-mdc-button-base ng-star-inserted" style="flex: 0 0 auto;" mat-ripple-loader-class-name="mat-mdc-button-ripple" aria-label="Digitized Material">
+                    <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span>
+                    <span class="mdc-button__label"> DIGITIZED MATERIAL&nbsp;&nbsp;
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" style="font-size: 16px; width: 16px; height: 16px;">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                        </svg>
+                    </span>
+                    <span class="mat-focus-indicator"></span>
+                    <span class="mat-mdc-button-touch-target"></span>
+                    <span class="mat-ripple mat-mdc-button-ripple"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
