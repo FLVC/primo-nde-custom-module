@@ -3,6 +3,10 @@
   "digitizationLinksEnabled": "false",
   "digitizationLinksMsg": "Request Digitization",
   "digitizationLinksViews": [],
+  "findingAidEnabled": "false",
+  "findingAidArray": [],
+  "digitizedMaterialArray": [],
+  "findingAidViews": [],  
   "hathiAvailabilityEnabled": "false",
   "hathiAvailabilityMsg": "Full Text Available at HathiTrust",
   "hathiAvailabilityEntityId": "",
@@ -19,6 +23,5 @@
   "uborrowRequestViews": [],
   "uborrowVolumeEnabled": "false",
   "uborrowVolumeViews": [],
-  "worldcatEnabled": "false"
-
+  "worldcatEnabled": "false"  
 }
