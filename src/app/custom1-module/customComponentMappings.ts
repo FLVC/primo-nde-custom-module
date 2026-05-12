@@ -20,7 +20,7 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-filters-value-after', RemoveEquipmentComponent],
 ['nde-base-request-form-after', UborrowRequestComponent],
 ['nde-base-request-form-bottom', UborrowVolumeComponent],
-['nde-record-availability-after', HathiAvailabilityComponent],
+['nde-record-availability-top', HathiAvailabilityComponent],
 ['nde-search-filters-side-nav-bottom', WorldCatFacetComponent],
 ['nde-footer-after', LibChatComponent],
 ['nde-header-after', NicheAcademyComponent],
