@@ -142,7 +142,11 @@ export class UborrowRequestComponent implements OnInit {
     const label = formField.querySelector('.mdc-floating-label') as HTMLElement | null;
     if (!label) return;
 
-    if (label.querySelector('.mat-form-field-required-marker')) return;
+    if (label.querySelector('.mat-form-field-required-marker')) {
+      submitButton.disabled = true;
+      submitButton.setAttribute('disabled', 'disabled');
+      return;
+    }
 
     const marker = document.createElement('span');
     marker.className = 'mat-form-field-required-marker';
@@ -163,6 +167,12 @@ export class UborrowRequestComponent implements OnInit {
     const pickupControl = this.pickupCtrl;
     const matSelect = document.querySelector('[id*="pickupLocation"]') as HTMLElement | null;
     const submitButton = document.querySelector('.submit-btn') as HTMLButtonElement | null;
+
+    if (this.specific && submitButton && submitButton.disabled) {
+      submitButton.disabled = false;
+      submitButton.removeAttribute('disabled');
+      return;
+    }
 
     if (!matSelect || !submitButton) return;
 
@@ -206,6 +216,20 @@ export class UborrowRequestComponent implements OnInit {
   }
 
   checkSpecific() {
+    const submitButton = document.querySelector('.submit-btn') as HTMLButtonElement | null;
+
+    if (this.specific) {
+      if (submitButton && submitButton.disabled) {
+        submitButton.disabled = false;
+        submitButton.removeAttribute('disabled');
+        return;
+      }
+    } 
+    else {
+      this.setInitialState();
+      return;
+    }
+
     if (this.specific == true) {
       const sub = this.zone.onStable.subscribe(() => {
         const chapter = this.hostComponent.form.get('chapter');
@@ -228,6 +252,9 @@ export class UborrowRequestComponent implements OnInit {
           sub.unsubscribe();
         }
       });
+    }
+    else {
+      this.checkPickupState();  
     }
   }
 }
