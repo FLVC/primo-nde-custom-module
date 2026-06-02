@@ -8,6 +8,14 @@ interface FullDisplayState {
 interface SearchState {
   searchParams: { [key: string]: any };
   entities: { [key: string]: any };
+  status: string | null;
+}
+
+interface BrowseSearchState {
+  isBrowseSearch: boolean | null;
+  status: string | null;
+  browseScopesStatus: string | null;
+  browseSearchParams: { [key: string]: any };
 }
 
 interface RouterState {
@@ -35,6 +43,7 @@ export const selectViewId = createSelector(
 
 const selectFullDisplay = createFeatureSelector<FullDisplayState>('full-display');
 const selectSearchState = createFeatureSelector<SearchState>('Search');
+const selectBrowseSearchState = createFeatureSelector<BrowseSearchState>('browse-search');
 const selectFullDisplayRecordId = createSelector(
   selectFullDisplay,
   (fullDisplay: FullDisplayState) => fullDisplay?.selectedRecordId ?? null
@@ -59,6 +68,16 @@ export const selectListViewRecord = (recordId: string) =>
 export const selectSearchParams = createSelector(
   selectSearchState,
   state => state.searchParams ?? null
+);
+
+export const selectSearchParamsOnSuccess = createSelector(
+  selectSearchState,
+  state => state.status == 'success' ? state.searchParams : null
+);
+
+export const selectBrowseSearchParamsOnSuccess = createSelector(
+  selectBrowseSearchState,
+  state => state.isBrowseSearch && state.status == 'success' ? state.browseSearchParams : null
 );
 
 const selectFeatureRouterState = createFeatureSelector<RouterState>('routerState');

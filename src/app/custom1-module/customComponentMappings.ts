@@ -12,6 +12,7 @@ import { UborrowVolumeComponent } from "../uborrow-volume/uborrow-volume.compone
 import { WidgetLoaderComponent } from "../widget-loader/widget-loader.component";
 import { WorldCatFacetComponent } from "../world-cat-facet/world-cat-facet.component";
 import { HathiLinksComponent } from "../hathi-links/hathi-links.component";
+import { GoogleAnalyticsComponent } from "../google-analytics/google-analytics.component";
 
 // Define the map
 export const selectorComponentMap = new Map<string, any>([
@@ -29,5 +30,6 @@ export const selectorComponentMap = new Map<string, any>([
 ['nde-location-bottom', HideAvailabilityComponent],
 ['nde-footer-bottom', WidgetLoaderComponent],
 ['nde-record-availability-bottom', FindingAidComponent],
-['nde-view-it-section-after', HathiLinksComponent]
+['nde-view-it-section-after', HathiLinksComponent],
+['nde-header-bottom', GoogleAnalyticsComponent]
 ]);
