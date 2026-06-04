@@ -6,7 +6,9 @@
   "findingAidEnabled": "false",
   "findingAidArray": [],
   "digitizedMaterialArray": [],
-  "findingAidViews": [],  
+  "findingAidViews": [],
+  "googleAnalyticsEnabled": "false",
+  "googleAnalyticsViewStreamIds": [],
   "hathiAvailabilityEnabled": "false",
   "hathiAvailabilityMsg": "Full Text Available at HathiTrust",
   "hathiAvailabilityEntityId": "",
@@ -17,6 +19,8 @@
   "hathiLinksViews": [],
   "hathiRequestEnabled": "false",
   "hathiRequestViews": [],
+  "hideAvailabilityEnabled": "false",
+  "hideAvailabilityLocations": [],
   "libChatEnabled": "false",
   "libChatScript": "",
   "libChatViews": [],
@@ -27,5 +31,10 @@
   "uborrowRequestViews": [],
   "uborrowVolumeEnabled": "false",
   "uborrowVolumeViews": [],
-  "worldcatEnabled": "false"  
+  "widgetLoaderEnabled": "false",
+  "widgetLoaderScript": "",
+  "widgetLoaderDivClass": "",
+  "widgetLoaderDivId": "",
+  "widgetLoaderDivValue": "",
+  "worldcatEnabled": "false"
 }
