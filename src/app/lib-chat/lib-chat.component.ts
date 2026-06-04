@@ -35,6 +35,10 @@ export class LibChatComponent implements OnInit {
     const viewsParam = this.moduleParameters.libChatViews;
     const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
 
+    if (!enabled) {
+      return;
+    }
+
     this.viewId$
       .pipe(take(1))
       .subscribe(code => {
