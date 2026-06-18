@@ -27,6 +27,7 @@
   "nicheAcademyEnabled": "false",
   "nicheAcademyScript": "",
   "removeEquipmentEnabled": "false",
+  "removeEquipmentViews": [],
   "uborrowRequestEnabled": "false",
   "uborrowRequestViews": [],
   "uborrowVolumeEnabled": "false",
