@@ -21,6 +21,7 @@ export class UborrowRequestComponent implements OnInit {
   chapter: string = "";
   pages: string = "";
   specific: boolean = false;
+  isDigitizationRequest: boolean = false;
   institutionCode: string = "";
   viewId: string = "";
   @Input() private hostComponent!: any;
@@ -46,6 +47,10 @@ export class UborrowRequestComponent implements OnInit {
     private httpService: HttpService,
     private zone: NgZone,
   ) { }
+
+  isDigitalOrChapterRequest(): boolean {
+    return this.specific || this.isDigitizationRequest;
+  }
 
   ngOnInit(): void {
     const enabled = this.moduleParameters.uborrowRequestEnabled === "true";
@@ -97,9 +102,17 @@ export class UborrowRequestComponent implements OnInit {
             const specific = form.get('specificChapterPages');
             const ownerCtrl = form.get('owner');
             const pickupCtrl = form.get('pickupLocation');
+            const articleTitle = form.get('articleTitle');
 
+            const isDigitization = !!articleTitle;
             const isChapter = !!(specific && specific.value);
-            if (isChapter) {
+
+            if (isDigitization) {
+              if (articleTitle && ownerCtrl) {
+                sub.unsubscribe();
+                this.handleRequestTypeChange();
+              }
+            } else if (isChapter) {
               if (specific && ownerCtrl) {
                 sub.unsubscribe();
                 this.handleRequestTypeChange();
@@ -115,7 +128,6 @@ export class UborrowRequestComponent implements OnInit {
         });
       }
     });
-
   }
 
   initializeControls() {
@@ -135,6 +147,9 @@ export class UborrowRequestComponent implements OnInit {
     } else {
       this.specific = false;
     }
+
+    const articleTitleCtrl = form.get('articleTitle');
+    this.isDigitizationRequest = !!articleTitleCtrl;
 
     const ownerCtrl = form.get('owner');
     if (ownerCtrl && !this.ownerCtrlSet) {
@@ -157,7 +172,7 @@ export class UborrowRequestComponent implements OnInit {
     if (pickupCtrl && !this.pickupCtrlSet) {
       this.pickupCtrl = pickupCtrl;
       this.pickupCtrlSet = true;
-      
+
       this.pickupCtrl.valueChanges.subscribe(() => {
         requestAnimationFrame(() => {
           this.checkPickupState();
@@ -182,14 +197,14 @@ export class UborrowRequestComponent implements OnInit {
   }
 
   setInitialState() {
-    if (this.specific) {
-      this.setInitialStateForChapterRequest();
+    if (this.isDigitalOrChapterRequest()) {
+      this.setInitialStateForDigitalOrChapterRequest();
     } else {
       this.setInitialStateForRegularRequest();
     }
   }
 
-  setInitialStateForChapterRequest() {
+  setInitialStateForDigitalOrChapterRequest() {
     const submitButton = document.querySelector('.submit-btn') as HTMLButtonElement | null;
     if (submitButton) {
       submitButton.disabled = false;
@@ -235,25 +250,32 @@ export class UborrowRequestComponent implements OnInit {
   }
 
   checkPickupState() {
-    if (this.specific) {
-      this.checkPickupStateForChapterRequest();
+    if (this.isDigitalOrChapterRequest()) {
+      this.checkPickupStateForDigitalOrChapterRequest();
     } else {
       this.checkPickupStateForRegularRequest();
     }
   }
 
-  checkPickupStateForChapterRequest() {
+  checkPickupStateForDigitalOrChapterRequest() {
     const submitButton = document.querySelector('.submit-btn') as HTMLButtonElement | null;
     if (submitButton && submitButton.disabled) {
       submitButton.disabled = false;
       submitButton.removeAttribute('disabled');
     }
 
-    if (this.institutionCode === 'UFL') {
-      if (this.citationType === 'CR' || this.pages !== '' || this.chapter !== '') {
-        console.log('setting owner to RES_SHARE');
-        this.ownerCtrl.setValue('RES_SHARE');
-        this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+    const digitalOwner = this.moduleParameters.uborrowRequestDigitalOwner;
+    if (digitalOwner) {
+      console.log('setting owner to digital owner: ' + digitalOwner);
+      this.ownerCtrl.setValue(digitalOwner);
+      this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+    } else if (this.specific) {
+      if (this.institutionCode === 'UFL') {
+        if (this.citationType === 'CR' || this.pages !== '' || this.chapter !== '') {
+          console.log('setting owner to RES_SHARE');
+          this.ownerCtrl.setValue('RES_SHARE');
+          this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+        }
       }
     }
   }
