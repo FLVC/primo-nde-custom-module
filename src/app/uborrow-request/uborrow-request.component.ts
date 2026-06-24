@@ -1,4 +1,4 @@
-import { Component, inject, Inject, Input, NgZone, OnInit } from '@angular/core';
+import { Component, inject, Inject, Input, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { getMatSelectDisplayedLabel, hideMatSelectById } from '../shared/utils';
@@ -14,7 +14,7 @@ import { selectInstitutionCode, selectViewId } from '../primo-store.service';
   templateUrl: './uborrow-request.component.html',
   styleUrl: './uborrow-request.component.scss'
 })
-export class UborrowRequestComponent implements OnInit {
+export class UborrowRequestComponent implements OnInit, OnDestroy {
   pickupCtrl = new FormControl('');
   ownerCtrl = new FormControl('');
   citationType: string = "";
@@ -41,6 +41,7 @@ export class UborrowRequestComponent implements OnInit {
   private citationTypeSet = false;
   private pickupCtrlSet = false;
   private specificSub = new Subscription();
+  private componentSubs = new Subscription();
 
   constructor(
     @Inject('MODULE_PARAMETERS') public moduleParameters: any,
@@ -82,7 +83,7 @@ export class UborrowRequestComponent implements OnInit {
       "institution_code=" + encodeURIComponent(this.institutionCode) +
       "&pickup_location=ALL";
 
-    this.hostComponent.isLoading$.subscribe((isLoading: any) => {
+    const isLoadingSub = this.hostComponent.isLoading$.subscribe((isLoading: any) => {
       if (!isLoading) {
         var requestType = this.hostComponent.formType;
         if (requestType === 'AlmaRequest') {
@@ -126,8 +127,15 @@ export class UborrowRequestComponent implements OnInit {
             }
           }
         });
+        this.componentSubs.add(sub);
       }
     });
+    this.componentSubs.add(isLoadingSub);
+  }
+
+  ngOnDestroy(): void {
+    this.componentSubs.unsubscribe();
+    this.specificSub.unsubscribe();
   }
 
   initializeControls() {
@@ -139,10 +147,11 @@ export class UborrowRequestComponent implements OnInit {
       this.specific = !!specific.value;
       if (!this.hasSubscribedToSpecific) {
         this.hasSubscribedToSpecific = true;
-        specific.valueChanges.subscribe(() => {
+        const specificCtrlSub = specific.valueChanges.subscribe(() => {
           this.specific = !!specific.value;
           this.handleRequestTypeChange();
         });
+        this.componentSubs.add(specificCtrlSub);
       }
     } else {
       this.specific = false;
@@ -162,10 +171,11 @@ export class UborrowRequestComponent implements OnInit {
     if (citationType && !this.citationTypeSet) {
       this.citationTypeSet = true;
       this.citationType = citationType.value;
-      citationType.valueChanges.subscribe(() => {
+      const citationTypeSub = citationType.valueChanges.subscribe(() => {
         this.citationType = citationType.value;
         this.checkPickupState();
       });
+      this.componentSubs.add(citationTypeSub);
     }
 
     const pickupCtrl = form.get('pickupLocation');
@@ -173,11 +183,12 @@ export class UborrowRequestComponent implements OnInit {
       this.pickupCtrl = pickupCtrl;
       this.pickupCtrlSet = true;
 
-      this.pickupCtrl.valueChanges.subscribe(() => {
+      const pickupCtrlSub = this.pickupCtrl.valueChanges.subscribe(() => {
         requestAnimationFrame(() => {
           this.checkPickupState();
         });
       });
+      this.componentSubs.add(pickupCtrlSub);
     }
   }
 
