@@ -173,7 +173,7 @@ export class UborrowRequestComponent implements OnInit, OnDestroy {
       this.citationType = citationType.value;
       const citationTypeSub = citationType.valueChanges.subscribe(() => {
         this.citationType = citationType.value;
-        this.checkPickupState();
+        this.handleRequestTypeChange();
       });
       this.componentSubs.add(citationTypeSub);
     }
@@ -193,18 +193,19 @@ export class UborrowRequestComponent implements OnInit, OnDestroy {
   }
 
   handleRequestTypeChange() {
-    this.initializeControls();
+    requestAnimationFrame(() => {
+      this.initializeControls();
 
-    this.specificSub.unsubscribe();
-    this.specificSub = new Subscription();
+      this.specificSub.unsubscribe();
+      this.specificSub = new Subscription();
 
-    this.setInitialState();
+      this.setInitialState();
 
-    if (this.specific) {
-      this.checkSpecific();
-    } else {
+      if (this.specific) {
+        this.checkSpecific();
+      }
       this.checkPickupState();
-    }
+    });
   }
 
   setInitialState() {
