@@ -278,9 +278,14 @@ export class UborrowRequestComponent implements OnInit, OnDestroy {
 
     const digitalOwner = this.moduleParameters.uborrowRequestDigitalOwner;
     if (digitalOwner) {
-      console.log('setting owner to digital owner: ' + digitalOwner);
-      this.ownerCtrl.setValue(digitalOwner);
-      this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+      if (this.ownerCtrl.value != digitalOwner) {
+        console.log('setting owner to digital owner: ' + digitalOwner);
+        this.ownerCtrl.setValue(digitalOwner);
+        this.ownerCtrl.updateValueAndValidity({ emitEvent: false });
+      }
+      else {
+        console.log("nothing to do owner already set to " + digitalOwner);
+      }
     } else if (this.specific) {
       if (this.institutionCode === 'UFL') {
         if (this.citationType === 'CR' || this.pages !== '' || this.chapter !== '') {
