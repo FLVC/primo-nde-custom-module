@@ -1,4 +1,4 @@
-import { Component, inject, Inject, Input, NgZone, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, Inject, Input, NgZone, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { getMatSelectDisplayedLabel, hideMatSelectById } from '../shared/utils';
@@ -12,7 +12,8 @@ import { selectInstitutionCode, selectViewId } from '../primo-store.service';
   standalone: true,
   imports: [],
   templateUrl: './uborrow-request.component.html',
-  styleUrl: './uborrow-request.component.scss'
+  styleUrl: './uborrow-request.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class UborrowRequestComponent implements OnInit, OnDestroy {
   pickupCtrl = new FormControl('');
