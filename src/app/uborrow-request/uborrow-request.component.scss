@@ -1,0 +1,16 @@
+nde-base-request-form {
+  [class*="reset"],
+  button[type="reset"] {
+    display: none !important;
+  }
+
+  mat-divider,
+  hr,
+  .divider {
+    &:has(+ [class*="actions"]),
+    &:has(+ [class*="buttons"]),
+    &:has(+ [class*="reset"]) {
+      display: none !important;
+    }
+  }
+}
