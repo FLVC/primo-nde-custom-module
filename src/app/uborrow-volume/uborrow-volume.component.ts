@@ -78,18 +78,18 @@ export class UborrowVolumeComponent implements OnInit, OnDestroy {
             const isChapter = !!(specific && specific.value);
 
             if (isDigitization) {
-              if (articleTitle && ownerCtrl) {
+              if (articleTitle) {
                 sub.unsubscribe();
                 this.handleRequestTypeChange();
               }
             } else if (isChapter) {
-              if (specific && ownerCtrl) {
+              if (specific) {
                 sub.unsubscribe();
                 this.handleRequestTypeChange();
               }
             } else {
               const hasSpecific = !!specific;
-              if (pickupCtrl && ownerCtrl && (!hasSpecific || specific)) {
+              if (pickupCtrl && (!hasSpecific || specific)) {
                 sub.unsubscribe();
                 this.handleRequestTypeChange();
               }
