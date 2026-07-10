@@ -73,6 +73,7 @@ export class UborrowVolumeComponent implements OnInit, OnDestroy {
             const ownerCtrl = form.get('owner');
             const pickupCtrl = form.get('pickupLocation');
             const articleTitle = form.get('articleTitle');
+            const volumeCtrl = form.get('volume');
 
             const isDigitization = !!articleTitle;
             const isChapter = !!(specific && specific.value);
@@ -89,7 +90,9 @@ export class UborrowVolumeComponent implements OnInit, OnDestroy {
               }
             } else {
               const hasSpecific = !!specific;
-              if (pickupCtrl && (!hasSpecific || specific)) {
+              const hasControls = Object.keys(form.controls).length > 0;
+              
+              if (pickupCtrl || volumeCtrl || hasControls) {
                 sub.unsubscribe();
                 this.handleRequestTypeChange();
               }
@@ -115,21 +118,32 @@ export class UborrowVolumeComponent implements OnInit, OnDestroy {
 
     const specific = form.get('specificChapterPages');
     if (specific) {
-      this.specific = !!specific.value;
+      const currentSpecific = !!specific.value;
+      if (this.specific !== currentSpecific) {
+        this.specific = currentSpecific;
+      }
       if (!this.hasSubscribedToSpecific) {
         this.hasSubscribedToSpecific = true;
         const specificCtrlSub = specific.valueChanges.subscribe(() => {
-          this.specific = !!specific.value;
+          const newSpecific = !!specific.value;
+          if (this.specific !== newSpecific) {
+            this.specific = newSpecific;
+          }
           this.handleRequestTypeChange();
         });
         this.componentSubs.add(specificCtrlSub);
       }
     } else {
-      this.specific = false;
+      if (this.specific !== false) {
+        this.specific = false;
+      }
     }
 
     const articleTitleCtrl = form.get('articleTitle');
-    this.isDigitizationRequest = !!articleTitleCtrl;
+    const currentIsDigitization = !!articleTitleCtrl;
+    if (this.isDigitizationRequest !== currentIsDigitization) {
+      this.isDigitizationRequest = currentIsDigitization;
+    }
 
     const citationType = form.get('citationType');
     if (citationType && !this.citationTypeSet) {
@@ -155,24 +169,26 @@ export class UborrowVolumeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const volumeCtrl = this.hostComponent.form.get('volume');
-    // Update selector to match Formly rendering with data-qa attribute
-    const element = (document.querySelector('[data-qa="almaResourceSharing.volume"] input') || 
-                     document.querySelector('input[formcontrolname="volume"]')) as HTMLElement;
+    const form = this.hostComponent?.form;
+    if (!form) return;
+
+    const volumeCtrl = form.get('volume');
+    const dataQaSelector = '[data-qa="almaResourceSharing.volume"] input';
+    const formControlNameSelector = 'input[formcontrolname="volume"]';
+    
+    const element = (document.querySelector(dataQaSelector) || 
+                     document.querySelector(formControlNameSelector)) as HTMLElement;
 
     if (volumeCtrl && element) {
-      // Set initial value to NONE if empty upon loading
       if (String(volumeCtrl.value ?? '').trim() === '') {
         volumeCtrl.setValue('NONE');
       }
 
-      // Cleanup existing blur listener before attaching new one
       if (this.blurListenerCleanup) {
         this.blurListenerCleanup();
         this.blurListenerCleanup = undefined;
       }
 
-      // Set to NONE if empty when field loses focus (blur)
       this.blurListenerCleanup = this.renderer.listen(element, 'blur', () => {
         if (String(volumeCtrl.value ?? '').trim() === '') {
           volumeCtrl.setValue('NONE');
