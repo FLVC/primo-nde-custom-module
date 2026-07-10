@@ -39,7 +39,7 @@ export class GoogleAnalyticsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const enabled = this.moduleParameters.googleAnalyticsEnabled === "true";
     const viewStreamIdsParam = this.moduleParameters.googleAnalyticsViewStreamIds;
-    const viewStreamIds: { [key: string]: string } = viewStreamIdsParam?.replace(/^\[|"|\]$/g, "").split(',').reduce((list:any, item:string) => {
+    const viewStreamIds: { [key: string]: string } = viewStreamIdsParam?.replace(/^\[|"|\s|\]$/g, "").split(',').reduce((list:any, item:string) => {
       const keyValue = item.split(':');
       return {...list, [keyValue[0]]: keyValue[1]}
     }, {});
