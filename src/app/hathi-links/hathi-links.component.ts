@@ -19,6 +19,7 @@ export class HathiLinksComponent {
   viewId: string = '';
   showLimit: number = 3;
   filter: boolean = false;
+  enabled: boolean = false;
   
   readonly viewId$ = this.store.select(selectViewId).pipe(
     distinctUntilChanged(),
@@ -38,6 +39,7 @@ export class HathiLinksComponent {
     const filter = this.moduleParameters.hathiLinksFilter === "true";
     
     this.filter = filter;
+    this.enabled = enabled;
 
     if (showLimitParam !== undefined && showLimitParam !== null && showLimitParam !== '') {
       const parsed = parseInt(showLimitParam, 10);
@@ -63,6 +65,10 @@ export class HathiLinksComponent {
   }
 
   ngAfterViewInit() {
+    if (!this.enabled) {
+      return;
+    }
+
     setTimeout(() => {
       this.enrichLinks(this.filter, null, 'afterviewinit');
       
