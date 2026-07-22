@@ -78,7 +78,7 @@ export class HathiAvailabilityService {
           for (var j = 0; j < result.items.length; j++) {
             var item = result.items[j];
             if (filter) {
-              if ("htid:" + item.htid === ids[i] && (item.rightsCode === 'pdus' || item.rightsCode === 'pd')) {
+              if ("htid:" + item.htid === ids[i] && (item.rightsCode === 'pdus' || item.rightsCode === 'pd' || item.rightsCode.startsWith('cc-'))) {
                 items.push({ htid: item.htid, enumcron: item.enumcron, itemURL: item.itemURL, rightsCode: item.rightsCode, orig: item.orig });
               }
             }
