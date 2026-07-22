@@ -106,7 +106,12 @@ export class HathiLinksComponent {
           item.serviceUrl.includes("http://hdl.handle.net")
       );
 
-    if (!hathiServices || hathiServices.length == 0) return;
+    const otherServices = services
+      .filter(
+        (item: ServiceEntry) =>
+          !item.packageName?.startsWith("HathiTrust") ||
+          !(typeof item.serviceUrl === "string" && item.serviceUrl.includes("http://hdl.handle.net"))
+      );
 
     const results = services
       .filter(
@@ -158,7 +163,7 @@ export class HathiLinksComponent {
             }
           });
           
-        this.hostComponent.electronicServices = updatedServices;
+        this.hostComponent.electronicServices = otherServices.concat(updatedServices);
         
         if (!expanded) {
           this.hostComponent.electronicServicesToShow = this.hostComponent.electronicServices.slice(0, this.showLimit);
@@ -171,7 +176,7 @@ export class HathiLinksComponent {
           '[data-qa="view-it-section-show-more-or-show-less"]'
         ) as HTMLElement;
         if (button) {
-          button.style.display = updatedServices.length <= this.showLimit ? 'none' : 'block';
+          button.style.display = this.hostComponent.electronicServices.length <= this.showLimit ? 'none' : 'block';
         }
       }
     });
