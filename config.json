@@ -2,6 +2,7 @@
   "bannerEnabled": "false",
   "digitizationLinksEnabled": "false",
   "digitizationLinksMsg": "Request Digitization",
+  "digitizationLinksUrl": "",
   "digitizationLinksViews": [],
   "findingAidEnabled": "false",
   "findingAidArray": [],
