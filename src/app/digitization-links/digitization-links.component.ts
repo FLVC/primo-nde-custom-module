@@ -21,7 +21,7 @@ export class DigitizationLinksComponent implements OnInit {
   isFullRecord: boolean = false;
   msg: string = '';
   viewId: string = '';
-  wolfUrl: string = 'https://wolfsonian.org/research/image-rights-reproductions/';
+  wolfUrl: string = '';
   bibTitle: string = '';
 
   readonly viewId$ = this.store.select(selectViewId).pipe(
@@ -36,12 +36,19 @@ export class DigitizationLinksComponent implements OnInit {
   ngOnInit() {
     const enabled = this.moduleParameters.digitizationLinksEnabled === "true";
     const msg = this.moduleParameters.digitizationLinksMsg ?? 'Request Digitization';
+    const url = this.moduleParameters.digitizationLinksUrl ?? null;
     const viewsParam = this.moduleParameters.digitizationLinksViews;
     const views = viewsParam?.replace(/^\[|\]$/g, "").split(",").map((s: string) => s.trim());
 
     if (!enabled) {
       return;
     }
+
+    if (url === null || url === undefined || url.trim() === "") {
+      return;
+    }
+
+    this.wolfUrl = url;
 
     this.viewId$
       .pipe(take(1))
