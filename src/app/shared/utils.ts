@@ -112,3 +112,120 @@ export function findClosestTargetFromElement(element: HTMLElement | null, search
 
   return null;
 }  
+
+/**
+ * Finds the closest element to the element supplied containing the id.
+ *
+ * @param element - the starting HTMLElement
+ * @param id - the id to search for
+ * @returns HTMLElement or null if not found
+ */
+export function findClosestIdFromElement(element: HTMLElement | null, id: string): HTMLElement | null {
+  let current: HTMLElement | null = element;
+
+  while (current && current !== document.body) {
+    if (current.id === id ) {
+      return current;
+    }
+
+    current = current.parentElement;
+  }
+
+  return null;
+}  
+
+export function findSiblingElement(sibling: HTMLElement | null, search: string): HTMLElement | null {
+  let current: HTMLElement | null = sibling;
+
+  if (current) {
+    if (current.classList.contains(search)) {
+        return current;
+      }
+
+    const found = current.querySelector(search);
+      if (found) {
+        return found as HTMLElement;
+      }
+
+    current = current.nextElementSibling as HTMLElement;
+  }
+
+  return null;
+}  
+
+export function findSiblingElementById(sibling: HTMLElement | null, id: string): HTMLElement | null {
+  let current: HTMLElement | null = sibling;
+
+  while (current && current !== document.body) {
+    if (current.id === id) {
+      return current;
+    }
+
+    const found = (current.id === id) ? current : null;
+    if (found) {
+      return found as HTMLElement;
+    }
+
+    current = current.nextElementSibling as HTMLElement;
+  }
+
+  return null;
+}  
+
+export function findChildElement(parent: HTMLElement | null, search: string): HTMLElement | null {
+  let current: HTMLElement | null = parent;
+  
+  if (current) {
+    if (current.classList.contains(search)) {
+      return current;
+      }
+
+    const found = current.querySelector(search);
+      if (found) {
+        return found as HTMLElement;
+      }
+
+    if (current.children) {
+      let count = 0;
+
+      for (let i = 0; i < current.children.length; i++) {
+        const foundChild = findChildElement(current.children[i] as HTMLElement, search);
+        if (foundChild != null) {
+          return foundChild;
+          }
+        }
+      }
+    }
+
+  return null;
+}  
+
+export function doesChildElementWithInnerHTMLExist(parent: HTMLElement | null, search: string): Boolean | null {
+  let current: HTMLElement | null = parent;
+  
+  if (current) {
+    if (current.innerHTML.includes(search)) {
+      return true;
+      }
+
+    const found = current.querySelector(search);
+      if (found) {
+        if (found.innerHTML.includes(search)) {
+          return true;
+        }
+      }
+
+    if (current.children) {
+      let count = 0;
+
+      for (let i = 0; i < current.children.length; i++) {
+        const foundChild = doesChildElementWithInnerHTMLExist(current.children[i] as HTMLElement, search);
+        if (foundChild != null) {
+          return true;
+          }
+        }
+      }
+    }
+
+  return false;
+}  
